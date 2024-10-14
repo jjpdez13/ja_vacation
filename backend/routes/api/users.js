@@ -45,8 +45,7 @@ router.post("/", validateSignup, async (req, res) => {
   });
 });
 
-// Fetch req for signup a new user
-/*
+/* Fetch req for signup a new user
 
 ***be sure to add new email***
 ***be sure to add new username***

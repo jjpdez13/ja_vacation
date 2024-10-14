@@ -60,7 +60,7 @@ router.delete("/", (req, res) => {
   return res.json({ message: "success" });
 });
 
-// Restore session user
+// Restore the session user
 router.get("/", (req, res) => {
   const { user } = req;
   if (user) {

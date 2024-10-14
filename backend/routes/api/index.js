@@ -17,8 +17,7 @@ router.get("/set-token-cookie", async (req, res) => {
   return res.json({ user: user });
 });
 
-// Fetch request for setting the token cookie
-/*
+/* Fetch request for setting the token cookie
 
 *yourUsername is either freddyTheDragon1, impulseFlash3, NazzieMoose7, BarryBee23, or JohnnyPeace12. FOR NOW*
 

@@ -1442,4 +1442,3 @@ Return spots filtered by query parameters.
     }
     ```
 # ja_vacation
-# ja_vacation

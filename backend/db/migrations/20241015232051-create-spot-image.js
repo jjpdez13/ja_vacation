@@ -19,9 +19,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Spots',
-          key: 'id',
+          model: "Spots",
+          key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       url: {
         allowNull: false,

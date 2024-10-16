@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Reviews', [
+    await queryInterface.bulkInsert("Reviews", [
       // Reviews for Spot 1 - App Academy
       {
         spotId: 1,
@@ -331,6 +331,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Reviews', options);
+    await queryInterface.bulkDelete("Reviews", options);
   }
 };

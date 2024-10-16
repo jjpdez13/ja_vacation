@@ -25,8 +25,6 @@ module.exports = {
           name: "App Academy",
           description: "Place where web developers are created",
           price: 123,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           ownerId: 49,
@@ -39,8 +37,6 @@ module.exports = {
           name: "Awesome spot",
           description: "Place where JA developed",
           price: 777,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           ownerId: 49,
@@ -53,8 +49,6 @@ module.exports = {
           name: "Great spot",
           description: "Place where Freddy developed",
           price: 177,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           ownerId: 9,
@@ -67,8 +61,6 @@ module.exports = {
           name: "Amazing spot",
           description: "Place where developed amazing people",
           price: 333,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           ownerId: 11,
@@ -81,8 +73,6 @@ module.exports = {
           name: "Strange spot",
           description: "Place where developed strange people",
           price: 200,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           ownerId: 12,
@@ -95,8 +85,6 @@ module.exports = {
           name: "Caps House",
           description: "The best spot to be!",
           price: 350,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           ownerId: 13,
@@ -109,8 +97,6 @@ module.exports = {
           name: "The Web",
           description: "It's dark and gloomy, AWESOME.",
           price: 450,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           ownerId: 11,
@@ -123,8 +109,6 @@ module.exports = {
           name: "The SpeedForce",
           description: "Unknown",
           price: 1000,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           ownerId: 11,
@@ -137,8 +121,6 @@ module.exports = {
           name: "Bearded Palace",
           description: "No relation to bearded lady",
           price: 175,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
         {
           ownerId: 11,
@@ -151,8 +133,6 @@ module.exports = {
           name: "The Moose Castle",
           description: "Where the MOOse gets loose",
           price: 1500,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
       ],
       {}

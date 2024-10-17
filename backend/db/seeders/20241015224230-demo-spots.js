@@ -1,3 +1,4 @@
+//Seeders Spots
 "use strict";
 
 const { Spot } = require("../models");
@@ -39,7 +40,7 @@ module.exports = {
           price: 777,
         },
         {
-          ownerId: 2,
+          ownerId: 3,
           address: "2100 White diamond",
           city: "Cloud Springs",
           state: "Colorado",
@@ -51,7 +52,7 @@ module.exports = {
           price: 177,
         },
         {
-          ownerId: 2,
+          ownerId: 4,
           address: "2720 Black Cloud",
           city: "Denver",
           state: "Colorado",
@@ -63,7 +64,7 @@ module.exports = {
           price: 333,
         },
         {
-          ownerId: 4,
+          ownerId: 5,
           address: "2345 Strange street",
           city: "Pueblo",
           state: "Colorado",
@@ -87,7 +88,7 @@ module.exports = {
           price: 350,
         },
         {
-          ownerId: 3,
+          ownerId: 2,
           address: "556 Widow Ln",
           city: "Webb",
           state: "New Hampshire",

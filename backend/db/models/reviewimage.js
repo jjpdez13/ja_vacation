@@ -1,36 +1,27 @@
-"use strict";
-
-const { Model } = require("sequelize");
-
+//Model ReviewImage
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class ReviewImage extends Model {
     static associate(models) {
-      ReviewImage.belongsTo(models.Review, {
-        foreignKey: "reviewId",
-        onDelete: "CASCADE",
-        hooks: true,
-      });
+      // define association here
+      ReviewImage.belongsTo(models.Review, { foreignKey: 'reviewId' });
     }
   }
-  ReviewImage.init(
-    {
-      reviewId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-          model: "Reviews",
-          key: "id",
-        },
-      },
-      url: {
-        allowNull: false,
-        type: DataTypes.STRING,
-      },
+  ReviewImage.init({
+    reviewId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
     },
-    {
-      sequelize,
-      modelName: "ReviewImage",
+    url: {
+      allowNull: false,
+      type: DataTypes.STRING
     }
-  );
+  }, {
+    sequelize,
+    modelName: 'ReviewImage',
+  });
   return ReviewImage;
 };

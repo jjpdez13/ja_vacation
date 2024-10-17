@@ -2,12 +2,14 @@
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
+  options.schema = process.env.SCHEMA;  // define your schema in options object
 }
+options.tableName = "Reviews";
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert("Reviews", [
+  async up(queryInterface, Sequelize) {
+    await queryInterface.bulkInsert(options, [
       // Reviews for Spot 1 - App Academy
       {
         spotId: 1,
@@ -39,17 +41,16 @@ module.exports = {
         review: "A great place for web dev training.",
         stars: 5,
       },
-
       // Reviews for Spot 2 - Awesome spot
       {
         spotId: 2,
-        userId: 5,
+        userId: 1,
         review: "Amazing place, highly recommend!",
         stars: 5,
       },
       {
         spotId: 2,
-        userId: 4,
+        userId: 2,
         review: "Had a great time, would come again.",
         stars: 4,
       },
@@ -61,17 +62,16 @@ module.exports = {
       },
       {
         spotId: 2,
-        userId: 2,
+        userId: 4,
         review: "Beautiful spot, very comfortable.",
         stars: 5,
       },
       {
         spotId: 2,
-        userId: 1,
+        userId: 5,
         review: "The location is perfect!",
         stars: 5,
       },
-
       // Reviews for Spot 3 - Great spot
       {
         spotId: 3,
@@ -104,16 +104,17 @@ module.exports = {
         stars: 5,
       },
 
+
       // Reviews for Spot 4 - Amazing spot
       {
         spotId: 4,
-        userId: 5,
+        userId: 1,
         review: "Amazing people and vibes!",
         stars: 5,
       },
       {
         spotId: 4,
-        userId: 4,
+        userId: 2,
         review: "Nice, but a bit noisy.",
         stars: 3,
       },
@@ -125,13 +126,13 @@ module.exports = {
       },
       {
         spotId: 4,
-        userId: 2,
+        userId: 4,
         review: "Super friendly staff.",
         stars: 5,
       },
       {
         spotId: 4,
-        userId: 1,
+        userId: 5,
         review: "Loved it, definitely coming back.",
         stars: 5,
       },
@@ -171,13 +172,13 @@ module.exports = {
       // Reviews for Spot 6 - Caps House
       {
         spotId: 6,
-        userId: 5,
+        userId: 1,
         review: "Best spot ever, highly recommend!",
         stars: 5,
       },
       {
         spotId: 6,
-        userId: 4,
+        userId: 2,
         review: "Had a great time, awesome house.",
         stars: 5,
       },
@@ -189,13 +190,13 @@ module.exports = {
       },
       {
         spotId: 6,
-        userId: 2,
+        userId: 4,
         review: "A cozy and comfortable stay.",
         stars: 4,
       },
       {
         spotId: 6,
-        userId: 1,
+        userId: 5,
         review: "Amazing decor and ambiance.",
         stars: 5,
       },
@@ -235,13 +236,13 @@ module.exports = {
       // Reviews for Spot 8 - The SpeedForce
       {
         spotId: 8,
-        userId: 5,
+        userId: 1,
         review: "Fastest service I've ever had!",
         stars: 5,
       },
       {
         spotId: 8,
-        userId: 4,
+        userId: 2,
         review: "Zoomed right through my expectations.",
         stars: 4,
       },
@@ -253,13 +254,13 @@ module.exports = {
       },
       {
         spotId: 8,
-        userId: 2,
+        userId: 4,
         review: "Great service but a bit rushed.",
         stars: 3,
       },
       {
         spotId: 8,
-        userId: 1,
+        userId: 5,
         review: "Lightning fast, loved it.",
         stars: 5,
       },
@@ -299,13 +300,13 @@ module.exports = {
       // Reviews for Spot 10 - The Moose Castle
       {
         spotId: 10,
-        userId: 5,
+        userId: 1,
         review: "Moose-tastic! Best place ever.",
         stars: 5,
       },
       {
         spotId: 10,
-        userId: 4,
+        userId: 2,
         review: "Moose everywhere, loved it.",
         stars: 5,
       },
@@ -317,13 +318,13 @@ module.exports = {
       },
       {
         spotId: 10,
-        userId: 2,
+        userId: 4,
         review: "Moose Castle is a must-see!",
         stars: 5,
       },
       {
         spotId: 10,
-        userId: 1,
+        userId: 5,
         review: "Loved the moose, the castle was epic.",
         stars: 5,
       },
@@ -331,6 +332,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("Reviews", options);
+    await queryInterface.bulkDelete(options);
   }
 };

@@ -1,3 +1,4 @@
+//seeders spotImages
 'use strict';
 
 let options = {};
@@ -8,7 +9,8 @@ if (process.env.NODE_ENV === "production") {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert("spot-images", [
+    options.tableName = 'SpotImages';
+    await queryInterface.bulkInsert(options, [
       {
         spotId: 1,
         url: 'https://example.com/spot1-image1.jpg',
@@ -33,6 +35,8 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("spot-images", options, {});
+    options.tableName = 'SpotImages';
+    await queryInterface.bulkDelete(options, null, {});
   }
 };
+

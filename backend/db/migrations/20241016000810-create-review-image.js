@@ -1,52 +1,46 @@
-"use strict";
+// migration reviewImages
+
+'use strict';
 
 let options = {};
-if (process.env.NODE_ENV === "production") {
-  options.schema = process.env.SCHEMA; // define your schema in options object
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
 }
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("spot-images", {
+    await queryInterface.createTable("ReviewImages", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
-      spotId: {
+      reviewId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "Spots",
+          model: "Reviews",
           key: "id",
         },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
       },
       url: {
         allowNull: false,
-        unique: true,
         type: Sequelize.STRING,
-      },
-      preview: {
-        defaultValue: false,
-        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-      },
+        type: Sequelize.DATE
+      }
     }, options, {});
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("spot-images", options);
-  },
+    await queryInterface.dropTable("ReviewImages", options);
+  }
 };

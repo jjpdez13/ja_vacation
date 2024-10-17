@@ -6,21 +6,10 @@ const { Model, Validator } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      User.hasMany(models.Spot, {
-        foreignKey: "ownerId",
-        onDelete: "CASCADE",
-        hooks: true,
-      });
-      User.hasMany(models.Booking, {
-        foreignKey: "userId",
-        onDelete: "CASCADE",
-        hooks: true,
-      });
-      User.hasMany(models.Review, {
-        foreignKey: "userId",
-        onDelete: "CASCADE",
-        hooks: true,
-      });
+      // define association here
+      User.hasMany(models.Spot, { foreignKey: 'ownerId', onDelete: "CASCADE", hooks: true });
+      User.hasMany(models.Booking, { foreignKey: 'userId', onDelete: "CASCADE", hooks: true });
+      User.hasMany(models.Review, { foreignKey: 'userId', onDelete: "CASCADE", hooks: true });
     }
   }
 
@@ -67,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
       defaultScope: {
         attributes: {
-          exclude: ["hashedPassword", "email", "createdAt", "updatedAt"],
+          exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt'],
         },
       },
     }

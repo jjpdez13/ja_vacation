@@ -1,8 +1,9 @@
+//Migration Spot
 'use strict';
 
 let options = {};
-if (process.env.NODE_ENV === "production") {
-  options.schema = process.env.SCHEMA; // define your schema in options object
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
 }
 
 /** @type {import('sequelize-cli').Migration} */
@@ -18,12 +19,7 @@ module.exports = {
       ownerId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        
       },
       address: {
         allowNull: false,

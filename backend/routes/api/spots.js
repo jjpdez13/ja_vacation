@@ -27,19 +27,8 @@ router.get('/current', requireAuth, async (req, res) => {
 
 // Get details of a Spot from an id
 router.get('/:spotid', async (req, res) => {
-    const spotId= req.spot.id;
-    const spot = await Spot.findByPk(spotid, {
-        where: {
-            spotId: spotId
-        }
-    });
-
-    if (!spot) {
-        return res.status(404).json({
-            message: "Spot couldn't be found"
-        });
-    }
-
+    const { spotId } = req.params;
+    const spot = await Spot.findByPk(spotId);
     return res.json(spot);
 });
 

@@ -26,10 +26,17 @@ router.get('/current', requireAuth, async (req, res) => {
 });
 
 // Get details of a Spot from an id
-router.get('/:spotId', async (req, res) => {
-    const spot = await Spot.findByPk(req.params.spotId);
+router.get('/:spotid', async (req, res) => {
+    const spot = await Spot.findByPk(req.params.spotId)
+
+    if (!spot) {
+        return res.status(404).json({
+            message: "Spot couldn't be found"
+        });
+    };
+
     return res.json(spot);
-})
+});
 
 // Create a Spot
 router.post('/', requireAuth, async (req, res) => {

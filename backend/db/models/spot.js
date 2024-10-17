@@ -6,16 +6,32 @@ module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
       Spot.belongsTo(models.User, { foreignKey: "ownerId" });
-      Spot.hasMany(models.SpotImage, { foreignKey: "spotId" });
-      Spot.hasMany(models.Booking, { foreignKey: "spotId" });
-      Spot.hasMany(models.Review, { foreignKey: "spotId" });
+      Spot.hasMany(models.SpotImage, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
+      Spot.hasMany(models.Booking, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
+      Spot.hasMany(models.Review, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
     }
   }
   Spot.init(
     {
       ownerId: {
-        allowNull:false,
+        allowNull: false,
         type: DataTypes.INTEGER,
+        references: {
+          model: "Users",
+          key: "id",
+        },
       },
       address: {
         allowNull: false,
@@ -23,15 +39,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       city: {
-        allowNull:false,
+        allowNull: false,
         type: DataTypes.STRING,
       },
       state: {
-        allowNull:false,
+        allowNull: false,
         type: DataTypes.STRING,
       },
       country: {
-        allowNull:false,
+        allowNull: false,
         type: DataTypes.STRING,
       },
       lat: {
@@ -47,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       price: {
-        allowNull:false,
+        allowNull: false,
         type: DataTypes.DECIMAL,
       },
     },

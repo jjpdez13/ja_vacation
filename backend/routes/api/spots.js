@@ -3,7 +3,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User, Spot, SpotImages } = require('../../db/models');
+const { User, Spot, SpotImage, Review, ReviewImage, sequelize } = require('../../db/models');
 const { where } = require('sequelize');
 // const { check } = require('express-validator');
 // const { handleValidationErrors } = require('../../utils/validation');
@@ -27,11 +27,9 @@ router.get('/current', requireAuth, async (req, res) => {
 
 // Get details of a Spot from an id
 router.get('/:spotid', async (req, res) => {
-    const { spotId } = req.params;
-    const SpotImage = req.params.spotImage;
-    const Review = req.params.Review;
+    const { spotid } = req.params;
 
-    const spot = await Spot.findByPk(spotId, {
+    const spot = await Spot.findByPk(spotid, {
         include: [
             {
                 model: SpotImage,
@@ -39,7 +37,6 @@ router.get('/:spotid', async (req, res) => {
             },
             {
                 model: User,
-                as: 'Owner',
                 attributes: ['id', 'firstName', 'lastName']
             },
             {
@@ -86,9 +83,9 @@ router.get('/:spotid', async (req, res) => {
         avgStarRating: avgStarRating.avgStarRating ? parseFloat(avgStarRating.avgStarRating).toFixed(1) : null,
         SpotImages: spot.SpotImages,
         Owner: {
-            id: spot.Owner.id,
-            firstName: spot.Owner.firstName,
-            lastName: spot.Owner.lastName
+            id: spot.ownerId,
+            firstName: spot.User.firstName,
+            lastName: spot.User.lastName
         }
     });
 });

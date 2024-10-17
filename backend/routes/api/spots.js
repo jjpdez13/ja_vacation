@@ -27,7 +27,7 @@ router.get('/current', requireAuth, async (req, res) => {
 
 // Get details of a Spot from an id
 router.get('/:spotid', async (req, res) => {
-    const spotId = req.params.spotId;
+    const { spotId } = req.params;
     const SpotImage = req.params.spotImage;
     const Review = req.params.Review;
 

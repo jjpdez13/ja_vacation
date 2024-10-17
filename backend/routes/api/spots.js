@@ -27,15 +27,68 @@ router.get('/current', requireAuth, async (req, res) => {
 
 // Get details of a Spot from an id
 router.get('/:spotid', async (req, res) => {
-    const spot = await Spot.findByPk(req.params.spotId)
+    const { spotid } = req.params;
+
+    const spot = await Spot.findByPk(spotid, {
+        include: [
+            {
+                model: SpotImage,
+                attributes: ['id', 'url', 'preview']
+            },
+            {
+                model: User,
+                as: 'Owner',
+                attributes: ['id', 'firstName', 'lastName']
+            },
+            {
+                model: Review,
+                attributes: []
+            }
+        ]
+    });
 
     if (!spot) {
         return res.status(404).json({
             message: "Spot couldn't be found"
         });
-    };
+    }
 
-    return res.json(spot);
+    // Calculate numReviews and avgStarRating
+    const numReviews = await Review.count({
+        where: { spotId: spotid }
+    });
+
+    const avgStarRating = await Review.findOne({
+        where: { spotId: spotid },
+        attributes: [
+            [sequelize.fn('AVG', sequelize.col('stars')), 'avgStarRating']
+        ],
+        raw: true
+    });
+
+    return res.json({
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
+        numReviews: numReviews,
+        avgStarRating: avgStarRating.avgStarRating ? parseFloat(avgStarRating.avgStarRating).toFixed(1) : null,
+        SpotImages: spot.SpotImages,
+        Owner: {
+            id: spot.Owner.id,
+            firstName: spot.Owner.firstName,
+            lastName: spot.Owner.lastName
+        }
+    });
 });
 
 // Create a Spot

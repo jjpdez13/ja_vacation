@@ -93,4 +93,27 @@ router.delete('/:reviewid', requireAuth, async (req, res) => {
     });
 });
 
+// Delete a Review Image
+router.delete('/:reviewid/:imageid', requireAuth, async (req, res) => {
+    const { reviewid, imageid } = req.params;
+
+    const review = await Review.findByPk(reviewid);
+    if (!review) {
+        return res.status(404).json({ message: "Review couldn't be found" });
+    }
+
+    const image = await ReviewImage.findByPk(imageid);
+    if (!image) {
+        return res.status(404).json({ message: "Review Image couldn't be found" });
+    }
+
+    // Authorization: Only the review owner can delete images
+    if (review.userId !== req.user.id) {
+        return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    await image.destroy();
+    return res.json({ message: "Successfully deleted" });
+});
+
 module.exports = router;

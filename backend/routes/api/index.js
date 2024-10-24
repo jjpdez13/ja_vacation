@@ -1,13 +1,12 @@
 // backend/routes/api/index.js
 const router = require("express").Router();
 const { setTokenCookie } = require("../../utils/auth.js");
-const { User, Spot, SpotImage } = require("../../db/models");
+const { User, Spot, SpotImage, Review, ReviewImage } = require("../../db/models");
 const sessionRouter = require("./session.js");
 const usersRouter = require("./users.js");
 const spotsRouter = require("./spots.js");
 const reviewsRouter = require("./reviews.js");
 const bookingsRouter = require("./bookings.js");
-const imagesRouter = require("./images.js");
 const { restoreUser } = require("../../utils/auth.js");
 
 // GET /api/set-token-cookie
@@ -47,8 +46,8 @@ router.get("/require-auth", requireAuth, (req, res) => {
 });
 
 // Delete a Spot Image
-router.delete('/:spotid/:imageid', requireAuth, async (req, res) => {
-  const { spotid, imageid } = req.params;
+router.delete('/spot-images/:imageid', requireAuth, async (req, res) => {
+  const { imageid } = req.params;
 
   const spot = await Spot.findByPk(spotid);
   if (!spot) {
@@ -69,12 +68,34 @@ router.delete('/:spotid/:imageid', requireAuth, async (req, res) => {
   return res.json({ message: "Successfully deleted" });
 });
 
+// Delete a Review Image
+router.delete('/review-images/:imageid', requireAuth, async (req, res) => {
+  const { reviewid, imageid } = req.params;
+
+  const review = await Review.findByPk(reviewid);
+  if (!review) {
+      return res.status(404).json({ message: "Review couldn't be found" });
+  }
+
+  const image = await ReviewImage.findByPk(imageid);
+  if (!image) {
+      return res.status(404).json({ message: "Review Image couldn't be found" });
+  }
+
+  // Authorization: Only the review owner can delete images
+  if (review.userId !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  await image.destroy();
+  return res.json({ message: "Successfully deleted" });
+});
+
 router.use("/session", sessionRouter);
 router.use("/users", usersRouter);
 router.use("/spots", spotsRouter);
 router.use("/reviews", reviewsRouter);
 router.use("/bookings", bookingsRouter);
-router.use("/images", imagesRouter);
 
 router.post("/api/test", function (req, res) {
     res.json({ requestBody: req.body });

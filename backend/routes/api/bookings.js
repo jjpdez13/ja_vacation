@@ -37,9 +37,9 @@ router.get("/current", requireAuth, async (req, res) => {
         include: [
           {
             model: SpotImage,
-            where: { preview: true }, // Find only the preview image
+            where: { preview: true },
             attributes: ["url"],
-            required: false, // Allow for Spots without a preview image
+            required: false,
           },
         ],
       },
@@ -49,7 +49,7 @@ router.get("/current", requireAuth, async (req, res) => {
   const formattedBookings = bookings.map((booking) => {
     const spot = booking.Spot;
     const previewImage =
-      spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null; // Get the preview image URL
+      spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null;
 
     return {
       id: booking.id,
@@ -65,7 +65,7 @@ router.get("/current", requireAuth, async (req, res) => {
         lng: spot.lng,
         name: spot.name,
         price: spot.price,
-        previewImage: previewImage, // Use the preview image URL
+        previewImage: previewImage,
       },
       userId: booking.userId,
       startDate: booking.startDate,
@@ -90,7 +90,7 @@ router.put('/:bookingid', requireAuth, async (req, res) => {
 
     // Check if the booking belongs to the user
     if (booking.userId !== req.user.id) {
-        return res.status(403).json({ message: "Unauthorized" });
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     // Validation checks
@@ -122,12 +122,12 @@ router.delete('/:bookingid', requireAuth, async (req, res) => {
     // Only allow deletion if the user owns the booking or the spot
     const spot = await Spot.findByPk(booking.spotId);
     if (booking.userId !== req.user.id && spot.ownerId !== req.user.id) {
-        return res.status(403).json({ message: "Unauthorized" });
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     // Prevent deletion of past bookings
     if (new Date() >= new Date(booking.endDate)) {
-        return res.status(403).json({ message: "Bookings that have been started can't be deleted" });
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     await booking.destroy();

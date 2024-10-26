@@ -32,7 +32,13 @@ router.post("/", validateSignup, async (req, res, next) => {
   const hashedPassword = bcrypt.hashSync(password);
 
   try {
-    const user = await User.create({ firstName, lastName, email, username, hashedPassword });
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      username,
+      hashedPassword,
+    });
 
     const safeUser = {
       id: user.id,
@@ -47,24 +53,26 @@ router.post("/", validateSignup, async (req, res, next) => {
     return res.status(201).json({
       user: safeUser,
     });
-
   } catch (error) {
     // Handle duplicate email or username
-    if (error.name === 'SequelizeUniqueConstraintError') {
+    if (error.name === "SequelizeUniqueConstraintError") {
       const errors = {};
-      error.errors.forEach(err => {
+      error.errors.forEach((err) => {
         errors[err.path] = `User with that ${err.path} already exists`;
       });
       return res.status(500).json({
         message: "User already exists",
-        errors,
+        errors: {
+          email: "User with that email already exists",
+          username: "User with that username already exists",
+        },
       });
     }
 
     // Handle validation errors from Sequelize
-    if (error.name === 'SequelizeValidationError') {
+    if (error.name === "SequelizeValidationError") {
       const errors = {};
-      error.errors.forEach(err => {
+      error.errors.forEach((err) => {
         errors[err.path] = err.message;
       });
       return res.status(400).json({
@@ -74,6 +82,5 @@ router.post("/", validateSignup, async (req, res, next) => {
     }
   }
 });
-
 
 module.exports = router;

@@ -2,8 +2,10 @@
 
 const express = require("express");
 const { requireAuth } = require("../../utils/auth");
-const { check } = require("express-validator");
-const { handleValidationErrors } = require("../../utils/validation");
+const {
+  handleValidationErrors,
+  validateSpot,
+} = require("../../utils/validation");
 const {
   User,
   Spot,
@@ -16,7 +18,7 @@ const {
 const { Op } = require("sequelize");
 const router = express.Router();
 
-// Get all spots with query filters
+// Add Query Filters to Get All Spots
 router.get("/", async (req, res) => {
   const {
     page = 1,
@@ -29,148 +31,96 @@ router.get("/", async (req, res) => {
     maxPrice,
   } = req.query;
 
-  // Validate query parameters
-  const errors = {};
   const pageNum = parseInt(page);
-  const pageSize = parseInt(size);
+  const sizeNum = parseInt(size);
 
-  if (pageNum < 1) errors.page = "Page must be greater than or equal to 1";
-  if (pageSize < 1 || pageSize > 20)
+  const errors = {};
+  if (!page || page < 1)
+    errors.page = "Page must be greater than or equal to 1";
+  if (!size || size < 1 || size > 20)
     errors.size = "Size must be between 1 and 20";
-  if (minLat && isNaN(minLat)) errors.minLat = "Minimum latitude is invalid";
-  if (maxLat && isNaN(maxLat)) errors.maxLat = "Maximum latitude is invalid";
-  if (minLng && isNaN(minLng)) errors.minLng = "Minimum longitude is invalid";
-  if (maxLng && isNaN(maxLng)) errors.maxLng = "Maximum longitude is invalid";
-  if (minPrice && minPrice < 0)
+  if (maxLat > 90) errors.maxLat = "Maximum latitude is invalid";
+  if (minLat < -90) errors.minLat = "Minimum latitude is invalid";
+  if (maxLng > 180) errors.maxLng = "Maximum longitude is invalid";
+  if (minLng < -180) errors.minLng = "Minimum longitude is invalid";
+  if (minPrice < 0)
     errors.minPrice = "Minimum price must be greater than or equal to 0";
-  if (maxPrice && maxPrice < 0)
+  if (maxPrice < 0)
     errors.maxPrice = "Maximum price must be greater than or equal to 0";
 
   if (Object.keys(errors).length > 0) {
     return res.status(400).json({
-      message: "Validation error",
-      errors,
+      message: "Bad Request",
+      errors: errors,
     });
   }
 
   const where = {};
-
-  // Apply filters
   if (minLat) where.lat = { [Op.gte]: parseFloat(minLat) };
   if (maxLat) where.lat = { ...where.lat, [Op.lte]: parseFloat(maxLat) };
   if (minLng) where.lng = { [Op.gte]: parseFloat(minLng) };
   if (maxLng) where.lng = { ...where.lng, [Op.lte]: parseFloat(maxLng) };
   if (minPrice) where.price = { [Op.gte]: parseFloat(minPrice) };
-  if (maxPrice) where.price = { ...where.price, [Op.lte]: parseFloat(maxPrice) };
+  if (maxPrice)
+    where.price = { ...where.price, [Op.lte]: parseFloat(maxPrice) };
 
-  // Pagination logic
-  const limit = Math.min(pageSize, 20); // Ensure limit is max 20
+  const limit = Math.min(sizeNum, 20);
   const offset = (pageNum - 1) * limit;
 
-  try {
-    const spots = await Spot.findAll({
-      where,
-      limit,
-      offset,
-      include: [
-        {
-          model: SpotImage,
-          as: "SpotImages",
-          where: { preview: true },
-          required: false,
-          attributes: ["url"],
-        },
-        {
-          model: Review,
-          attributes: [],
-        },
-      ],
-      attributes: {
-        include: [
-          // Calculating average rating
-          [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
-        ],
+  const spots = await Spot.findAll({
+    where,
+    limit,
+    offset,
+    include: [
+      {
+        model: SpotImage,
+        as: "SpotImages",
+        where: { preview: true },
+        required: false,
+        attributes: ["url"],
       },
-      group: ["Spot.id"],
-      subQuery: false,
-    });
+      {
+        model: Review,
+        attributes: [],
+      },
+    ],
+    group: ["Spot.id", "SpotImages.id"],
+    subQuery: false,
+  });
 
-    // Format response
-    const result = spots.rows.map((spot) => ({
+  const result = spots.map((spot) => {
+    const numReviews = spot.Reviews ? spot.Reviews.length : 0;
+    const avgRating =
+      numReviews > 0
+        ? spot.Reviews.reduce((sum, review) => sum + review.stars, 0) /
+          numReviews
+        : 0;
+    return {
       id: spot.id,
       ownerId: spot.ownerId,
       address: spot.address,
       city: spot.city,
       state: spot.state,
       country: spot.country,
-      lat: spot.lat,
-      lng: spot.lng,
+      lat: spot.lat ? parseFloat(spot.lat) : null,
+      lng: spot.lng ? parseFloat(spot.lng) : null,
       name: spot.name,
       description: spot.description,
-      price: spot.price,
+      price: spot.price ? parseFloat(spot.price) : null,
       createdAt: spot.createdAt,
       updatedAt: spot.updatedAt,
       avgRating: spot.dataValues.avgRating
         ? parseFloat(spot.dataValues.avgRating).toFixed(1)
         : null,
+
       previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null,
-    }));
+    };
+  });
 
-    return res.json({
-      Spots: result,
-      page: pageNum,
-      size: limit,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Server error" });
-  }
-});
-
-// Get all spots
-router.get("/", (req, res, next) => {
-  Spot.findAll({
-    attributes: {
-      include: [
-        [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgStarRating"],
-      ],
-    },
-    include: [
-      {
-        model: Review,
-        attributes: [], // Exclude Review data
-      },
-      {
-        model: SpotImage,
-        attributes: ["url"],
-        where: {
-          preview: true, // Only include preview images
-        },
-        required: false, // Allows spots without preview images to be included
-      },
-    ],
-    group: ["Spot.id"], // Group by spot id to calculate the average rating correctly
-  }).then((spots) => {
-    // Format the response
-    const formattedSpots = spots.map((spot) => ({
-      id: spot.id,
-      ownerId: spot.ownerId,
-      address: spot.address,
-      city: spot.city,
-      state: spot.state,
-      country: spot.country,
-      lat: spot.lat,
-      lng: spot.lng,
-      name: spot.name,
-      description: spot.description,
-      price: spot.price,
-      avgStarRating: spot.getDataValue("avgStarRating") || 0, // Default to 0 if no reviews
-      previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null, // Get the preview image URL
-    }));
-
-    return res.json({
-      Spots: formattedSpots,
-    });
+  res.json({
+    Spots: result,
+    page: pageNum,
+    size: limit,
   });
 });
 
@@ -277,7 +227,7 @@ router.get("/:spotid", async (req, res) => {
     updatedAt: spot.updatedAt,
     numReviews: numReviews,
     avgStarRating: avgStarRating.avgStarRating
-      ? parseFloat(avgStarRating.avgStarRating).toFixed(1)
+      ? Math.round(parseFloat(avgStarRating.avgStarRating) * 10) / 10
       : null,
     SpotImages: spot.SpotImages,
     Owner: {
@@ -287,38 +237,6 @@ router.get("/:spotid", async (req, res) => {
     },
   });
 });
-
-// Validation middleware
-const validateSpot = [
-  check("address")
-    .exists({ checkFalsy: true })
-    .withMessage("Street address is required"),
-  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
-  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
-  check("country")
-    .exists({ checkFalsy: true })
-    .withMessage("Country is required"),
-  check("lat")
-    .exists({ checkFalsy: true })
-    .isFloat({ min: -90, max: 90 })
-    .withMessage("Latitude must be within -90 and 90"),
-  check("lng")
-    .exists({ checkFalsy: true })
-    .isFloat({ min: -180, max: 180 })
-    .withMessage("Longitude must be within -180 and 180"),
-  check("name")
-    .exists({ checkFalsy: true })
-    .isLength({ max: 50 })
-    .withMessage("Name must be less than 50 characters"),
-  check("description")
-    .exists({ checkFalsy: true })
-    .withMessage("Description is required"),
-  check("price")
-    .exists({ checkFalsy: true })
-    .isFloat({ gt: 0 })
-    .withMessage("Price per day must be a positive number"),
-  handleValidationErrors,
-];
 
 // Create a Spot
 router.post("/", requireAuth, validateSpot, async (req, res) => {
@@ -341,49 +259,39 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     return res.status(201).json(spot);
   } catch (error) {
     return res.status(400).json({
-      message: "Validation error",
+      message: "Bad Request",
       errors: error.errors,
     });
   }
 });
 
 // Add an Image to a Spot based on the Spot's id
-router.post("/:spotid/images", requireAuth, async (req, res) => {
-  const { spotid } = req.params;
+router.post("/:spotId/images", requireAuth, async (req, res) => {
+  const { spotId } = req.params;
   const { url, preview } = req.body;
+  const userId = req.user.id;
 
-  try {
-    // Find the Spot
-    const spot = await Spot.findByPk(spotid);
+  const spot = await Spot.findByPk(Number(spotId));
 
-    // If the Spot is not found, return a 404 error
-    if (!spot) {
-      return res.status(404).json({
-        message: "Spot couldn't be found",
-      });
-    }
-
-    // Check if the authenticated user is the owner of the Spot
-    if (spot.ownerId !== req.user.id) {
-      return res.status(403).json({
-        message: "Forbidden",
-      });
-    }
-
-    // Create the SpotImage
-    const image = await SpotImage.create({
-      spotId: spot.id,
-      url,
-      preview,
-    });
-
-    return res.status(201).json(image);
-  } catch (error) {
-    return res.status(500).json({
-      message: "Internal Server Error",
-      error: error.message,
-    });
+  if (!spot) {
+    return res.status(404).json({ message: "Spot couldn't be found" });
   }
+
+  if (spot.ownerId !== userId) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  const createImage = await SpotImage.create({
+    spotId: spot.id,
+    url,
+    preview,
+  });
+
+  return res.status(201).json({
+    id: createImage.id,
+    url: createImage.url,
+    preview: createImage.preview,
+  });
 });
 
 // Edit a Spot
@@ -391,13 +299,16 @@ router.put("/:spotid", requireAuth, validateSpot, async (req, res) => {
   const { spotid } = req.params;
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
+  const userId = req.user.id;
 
   const spot = await Spot.findByPk(spotid);
 
-  if (!spot || spot.ownerId !== req.user.id) {
-    return res.status(404).json({
-      message: "Spot couldn't be found",
-    });
+  if (!spot) {
+    return res.status(404).json({ message: "Spot couldn't be found" });
+  }
+
+  if (spot.ownerId !== userId) {
+    return res.status(403).json({ message: "Forbidden" });
   }
 
   try {
@@ -417,7 +328,7 @@ router.put("/:spotid", requireAuth, validateSpot, async (req, res) => {
     return res.json(spot);
   } catch (error) {
     return res.status(400).json({
-      message: "Validation error",
+      message: "Bad Request",
       errors: error.errors,
     });
   }
@@ -426,15 +337,22 @@ router.put("/:spotid", requireAuth, validateSpot, async (req, res) => {
 // Delete a Spot
 router.delete("/:spotid", requireAuth, async (req, res) => {
   const { spotid } = req.params;
+  const userId = req.user.id;
 
   const spot = await Spot.findByPk(spotid);
 
-  if (!spot || spot.ownerId !== req.user.id) {
-    return res.status(404).json({
-      message: "Spot couldn't be found",
-    });
+  if (!spot) {
+    return res.status(404).json({ message: "Spot couldn't be found" });
   }
 
+  if (spot.ownerId !== userId) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  await Review.destroy({ where: { spotId: spotid } });
+  await Booking.destroy({ where: { spotId: spotid } });
+  await SpotImage.destroy({ where: { spotId: spotid } });
+  
   await spot.destroy();
   return res.json({
     message: "Successfully deleted",
@@ -600,7 +518,7 @@ router.post("/:spotid/booking", requireAuth, async (req, res) => {
   }
 
   if (spot.ownerId === userId) {
-    return res.status(403).json({ message: "Cannot book your own spot" });
+    return res.status(403).json({ message: "Forbidden" });
   }
 
   // Check for conflicts with existing bookings

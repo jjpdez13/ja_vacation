@@ -35,18 +35,14 @@ router.get("/", async (req, res) => {
   const sizeNum = parseInt(size);
 
   const errors = {};
-  if (!page || page < 1)
-    errors.page = "Page must be greater than or equal to 1";
-  if (!size || size < 1 || size > 20)
-    errors.size = "Size must be between 1 and 20";
-  if (maxLat > 90) errors.maxLat = "Maximum latitude is invalid";
-  if (minLat < -90) errors.minLat = "Minimum latitude is invalid";
-  if (maxLng > 180) errors.maxLng = "Maximum longitude is invalid";
-  if (minLng < -180) errors.minLng = "Minimum longitude is invalid";
-  if (minPrice < 0)
-    errors.minPrice = "Minimum price must be greater than or equal to 0";
-  if (maxPrice < 0)
-    errors.maxPrice = "Maximum price must be greater than or equal to 0";
+  if (isNaN(pageNum) || pageNum < 1) errors.page = "Page must be greater than or equal to 1";
+  if (isNaN(sizeNum) || sizeNum < 1 || sizeNum > 20) errors.size = "Size must be between 1 and 20";
+  if (maxLat !== undefined && (isNaN(parseFloat(maxLat)) || maxLat > 90)) errors.maxLat = "Maximum latitude is invalid";
+  if (minLat !== undefined && (isNaN(parseFloat(minLat)) || minLat < -90)) errors.minLat = "Minimum latitude is invalid";
+  if (maxLng !== undefined && (isNaN(parseFloat(maxLng)) || maxLng > 180)) errors.maxLng = "Maximum longitude is invalid";
+  if (minLng !== undefined && (isNaN(parseFloat(minLng)) || minLng < -180)) errors.minLng = "Minimum longitude is invalid";
+  if (minPrice !== undefined && (isNaN(parseFloat(minPrice)) || minPrice < 0)) errors.minPrice = "Minimum price must be greater than or equal to 0";
+  if (maxPrice !== undefined && (isNaN(parseFloat(maxPrice)) || maxPrice < 0)) errors.maxPrice = "Maximum price must be greater than or equal to 0";
 
   if (Object.keys(errors).length > 0) {
     return res.status(400).json({
@@ -147,28 +143,30 @@ router.get("/current", requireAuth, async (req, res, next) => {
         required: false,
       },
     ],
-  })
-    // Format the response
-    const formattedSpots = spots.map((spot) => ({
-      id: spot.id,
-      ownerId: spot.ownerId,
-      address: spot.address,
-      city: spot.city,
-      state: spot.state,
-      country: spot.country,
-      lat: spot.lat,
-      lng: spot.lng,
-      name: spot.name,
-      description: spot.description,
-      price: spot.price,
-      avgStarRating: spot.getDataValue("avgStarRating") || 0, // Default to 0 if no reviews
-      previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null, // Get the preview image URL
-    }));
-
-    return res.json({
-      Spots: formattedSpots,
-    });
   });
+  // Format the response
+  const formattedSpots = spots.map((spot) => ({
+    id: spot.id,
+    ownerId: spot.ownerId,
+    address: spot.address,
+    city: spot.city,
+    state: spot.state,
+    country: spot.country,
+    lat: spot.lat,
+    lng: spot.lng,
+    name: spot.name,
+    description: spot.description,
+    price: spot.price,
+    createdAt: spot.createdAt,
+    updatedAt: spot.updatedAt,
+    avgRating: spot.getDataValue("avgStarRating") || 0, // Default to 0 if no reviews
+    previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null, // Get the preview image URL
+  }));
+
+  return res.json({
+    Spots: formattedSpots,
+  });
+});
 
 // Get details of a Spot from a spotid
 router.get("/:spotid", async (req, res) => {
@@ -351,7 +349,7 @@ router.delete("/:spotid", requireAuth, async (req, res) => {
   await Review.destroy({ where: { spotId: spotid } });
   await Booking.destroy({ where: { spotId: spotid } });
   await SpotImage.destroy({ where: { spotId: spotid } });
-  
+
   await spot.destroy();
   return res.json({
     message: "Successfully deleted",
@@ -396,6 +394,15 @@ router.get("/:spotid/reviews", async (req, res) => {
     stars: review.stars,
     createdAt: review.createdAt,
     updatedAt: review.updatedAt,
+    User: {
+      id: review.User.id,
+      firstName: review.User.firstName,
+      lastName: review.User.lastName,
+    },
+    ReviewImages: review.ReviewImages.map((image) => ({
+      id: image.id,
+      url: image.url,
+    })),
   }));
 
   return res.json({ Reviews: formattedReviews });

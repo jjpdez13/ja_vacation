@@ -125,10 +125,10 @@ router.get("/", async (req, res) => {
 });
 
 // Get all Spots owned by the Current User
-router.get("/current", requireAuth, (req, res, next) => {
+router.get("/current", requireAuth, async (req, res, next) => {
   const userId = req.user.id;
 
-  Spot.findAll({
+  const spots = await Spot.findAll({
     where: { ownerId: userId },
     attributes: {
       include: [
@@ -147,7 +147,7 @@ router.get("/current", requireAuth, (req, res, next) => {
         required: false,
       },
     ],
-  }).then((spots) => {
+  })
     // Format the response
     const formattedSpots = spots.map((spot) => ({
       id: spot.id,
@@ -169,7 +169,6 @@ router.get("/current", requireAuth, (req, res, next) => {
       Spots: formattedSpots,
     });
   });
-});
 
 // Get details of a Spot from a spotid
 router.get("/:spotid", async (req, res) => {
@@ -301,7 +300,7 @@ router.put("/:spotid", requireAuth, validateSpot, async (req, res) => {
     req.body;
   const userId = req.user.id;
 
-  const spot = await Spot.findByPk(spotid);
+  const spot = await Spot.findByPk(Number(spotid));
 
   if (!spot) {
     return res.status(404).json({ message: "Spot couldn't be found" });
@@ -339,7 +338,7 @@ router.delete("/:spotid", requireAuth, async (req, res) => {
   const { spotid } = req.params;
   const userId = req.user.id;
 
-  const spot = await Spot.findByPk(spotid);
+  const spot = await Spot.findByPk(Number(spotid));
 
   if (!spot) {
     return res.status(404).json({ message: "Spot couldn't be found" });
@@ -364,7 +363,7 @@ router.get("/:spotid/reviews", async (req, res) => {
   const { spotid } = req.params;
 
   // Check if the spot exists
-  const spot = await Spot.findByPk(spotid);
+  const spot = await Spot.findByPk(Number(spotid));
 
   console.log(spot);
 
@@ -409,7 +408,7 @@ router.post("/:spotid/reviews", requireAuth, async (req, res) => {
   const userId = req.user.id;
 
   // Check if spot exists
-  const spot = await Spot.findByPk(spotid);
+  const spot = await Spot.findByPk(Number(spotid));
   if (!spot) {
     return res.status(404).json({
       message: "Spot couldn't be found",

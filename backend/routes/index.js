@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const apiRouter = require("./api");
+const path = require("path");
 
 router.get("/hello/world", function (req, res) {
   res.cookie("XSRF-TOKEN", req.csrfToken());
@@ -21,7 +22,7 @@ router.use("/api", apiRouter);
 
 // Serve React build files in production
 if (process.env.NODE_ENV === "production") {
-  const path = require("path");
+  // const path = require("path");
   // Serve the frontend's index.html file at the root route
   router.get("/", (req, res) => {
     res.cookie("XSRF-TOKEN", req.csrfToken());

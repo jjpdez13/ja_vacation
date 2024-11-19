@@ -4,12 +4,18 @@ import App from "./App";
 import "./index.css";
 import { Provider } from "react-redux";
 import { configureStore } from "./store";
+import { restoreCSRF, csrfFetch } from "./store/csrf";
 
 // create the store by calling configure store
 const store = configureStore();
 
-// expose the store in dev mode 
-if (import.meta.env.MODE !== 'production') window.store = store;
+// call for csrf restoration within store exposition in dev mode
+if (import.meta.env.MODE !== 'production') {
+  restoreCSRF();
+
+  window.csrfFetch = csrfFetch;
+  window.store = store;
+}
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

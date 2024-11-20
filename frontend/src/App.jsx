@@ -9,6 +9,8 @@ import {
 import LoginFormPage from "./components";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import SignupFormPage from "./components/SignUpPage";
+import { sessionActions } from "./store";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ const router = createBrowserRouter(
       <Route element={<Layout />}>
         <Route path="/" element={<h1>Welcome!</h1>} />
         <Route path="/login" element={<LoginFormPage />} />
+        <Route path="/signup" element={<SignupFormPage />} />
       </Route>
     </>
   )

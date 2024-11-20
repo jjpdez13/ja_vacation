@@ -6,11 +6,10 @@ import {
   Route,
   Outlet,
 } from "react-router-dom";
-import LoginFormPage from "./components";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import SignupFormPage from "./components/SignUpPage";
 import { sessionActions } from "./store";
+import { LoginFormPage, SignupFormPage } from "./components";
 
 function Layout() {
   const dispatch = useDispatch();

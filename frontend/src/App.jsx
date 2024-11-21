@@ -9,7 +9,8 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { sessionActions } from "./store";
-import { LoginFormPage, SignupFormPage } from "./components";
+import { LoginFormPage, SignupFormPage, Navigation, ProfileButton } from "./components";
+
 
 function Layout() {
   const dispatch = useDispatch();
@@ -21,7 +22,11 @@ function Layout() {
     });
   }, [dispatch]);
 
-  return <>{isLoaded && <Outlet />}</>;
+  return (<>
+    <Navigation isLoaded={isLoaded} />
+    {isLoaded && <Outlet />}
+  </>
+  );
 }
 
 const router = createBrowserRouter(

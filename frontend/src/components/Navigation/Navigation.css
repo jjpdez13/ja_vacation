@@ -1,0 +1,105 @@
+/* Navigation.css */
+
+/* General Reset for Navigation */
+ul, li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff385c; /* Airbnb's signature pink color */
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .navbar-links a {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333333;
+    transition: color 0.2s ease;
+  }
+  
+  .navbar-links a:hover {
+    color: #ff385c;
+  }
+  
+  /* Profile Button */
+  .profile-button {
+    position: relative;
+    border: none;
+    font-size: 1.2rem;
+    color: #333333;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  /* Dropdown Menu */
+  .profile-dropdown {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0;
+    display: none;
+    z-index: 1000;
+  }
+  
+  .profile-dropdown li {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: #333333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .profile-dropdown li:hover {
+    background-color: #f7f7f7;
+  }
+  
+  /* Show Dropdown */
+  .profile-dropdown.show {
+    display: block;
+  }
+  
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .navbar-links {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  
+    .profile-dropdown {
+      right: auto;
+      left: 0;
+    }
+  }

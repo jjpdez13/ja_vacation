@@ -9,8 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { sessionActions } from "./store";
-import { SignupFormPage, Navigation, ProfileButton } from "./components";
-
+import { Navigation } from "./components";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -34,7 +33,6 @@ const router = createBrowserRouter(
     <>
       <Route element={<Layout />}>
         <Route path="/" element={<h1>Welcome!</h1>} />
-        <Route path="/signup" element={<SignupFormPage />} />
       </Route>
     </>
   )

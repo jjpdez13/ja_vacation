@@ -1,14 +1,13 @@
-// frontend/src/components/SignupFormPage/SignupFormPage.jsx
+// frontend/src/components/SignupFormModal/SignupFormModal.jsx
 
 import { useState } from "react";
 import * as sessionActions from "../../store/session";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import "./SignupForm.css";
+import { useModal } from "../../context/Modal";
 
-function SignupFormPage() {
+function SignupFormModal() {
   const dispatch = useDispatch();
-  const sessionUser = useSelector((state) => state.session.user);
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -16,14 +15,21 @@ function SignupFormPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const { closeModal } = useModal();
 
-  if (sessionUser) return <Navigate to="/" replace={true} />;
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      setErrors({});
-      return dispatch(
+    setErrors({});
+
+    if (password !== confirmPassword) {
+      setErrors({
+        confirmPassword: "Confirm Password must be same as Password",
+      });
+      return;
+    }
+
+    try {
+      await dispatch(
         sessionActions.signup({
           username,
           firstName,
@@ -31,16 +37,14 @@ function SignupFormPage() {
           email,
           password,
         })
-      ).catch(async (res) => {
-        const data = await res.json();
-        if (data?.errors) {
-          setErrors(data.errors);
-        }
-      });
+      );
+      closeModal();
+    } catch (res) {
+      const data = await res.json();
+      if (data?.errors) {
+        setErrors(data.errors);
+      }
     }
-    return setErrors({
-      confirmPassword: "Confirm Password must be same as Password",
-    });
   };
 
   return (
@@ -113,4 +117,4 @@ function SignupFormPage() {
   );
 }
 
-export default SignupFormPage;
+export default SignupFormModal;

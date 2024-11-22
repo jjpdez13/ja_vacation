@@ -9,7 +9,7 @@ import {
   restoreCSRF,
   csrfFetch,
 } from "./store";
-import { ModalProvider, Modal } from "./context/modal";
+import { ModalProvider, Modal } from "./context/Modal";
 
 // create the store by calling configure store
 const store = configureStore();

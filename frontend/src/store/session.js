@@ -15,11 +15,6 @@ const removeUser = () => ({
   type: REMOVE_USER,
 });
 
-const signUpUser = (user) => ({
-  type: SIGNUP_USER,
-  payload: user,
-})
-
 // Thunk Action: Log In
 export const login = (user) => async (dispatch) => {
   const { credential, password } = user;
@@ -63,7 +58,7 @@ export const signup = (user) => async dispatch => {
 }
 
 // Thunk Action: Log Out
-export const logout = (user) => async dispatch => {
+export const logout = () => async dispatch => {
   const res = await csrfFetch("/api/session", {
     method: "DELETE"
   });

@@ -70,6 +70,7 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
       }
     }, options, {});
+    await queryInterface.sequelize.query('ALTER SEQUENCE "Spots_id_seq" RESTART WITH 1;')
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Spots", options);

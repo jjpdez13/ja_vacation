@@ -565,7 +565,15 @@ router.post("/:spotid/booking", requireAuth, async (req, res) => {
     endDate,
   });
 
-  return res.status(201).json(booking);
+  const formatDate = {
+    ...booking.toJSON(),
+    // createdAt: new Date(newBooking.createdAt).toLocaleString('en-US', { timeZone: 'UTC', hour12: false }),
+    // updatedAt: new Date(newBooking.updatedAt).toLocaleString('en-US', { timeZone: 'UTC', hour12: false }),
+    createdAt: new Date(newBooking.createdAt).toISOString().replace('T', ' ').split('.')[0], 
+    updatedAt: new Date(newBooking.updatedAt).toISOString().replace('T', ' ').split('.')[0]  
+};
+return res.status(201).json(formatDate);
+
 });
 
 module.exports = router;

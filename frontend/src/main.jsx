@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import {
   configureStore,
   sessionActions,
+  spotActions,
   restoreCSRF,
   csrfFetch,
 } from "./store";
@@ -21,6 +22,7 @@ if (import.meta.env.MODE !== "production") {
   window.csrfFetch = csrfFetch;
   window.store = store;
   window.sessionActions = sessionActions;
+  window.spotActions = spotActions;
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(

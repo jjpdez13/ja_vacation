@@ -11,12 +11,12 @@ function SpotFormModal({ spot = {} }) {
   const { closeModal } = useModal();
   const [name, setName] = useState(spot.name || "");
   const [location, setLocation] = useState(spot.location || "");
-  const [street, setStreet] = useState(spot.street || "");
+  const [address, setAddress] = useState(spot.address || "");
   const [city, setCity] = useState(spot.city || "");
   const [state, setState] = useState(spot.state || "");
   const [country, setCountry] = useState(spot.country || "");
-  const [longitude, setLongitude] = useState(spot.longitude || "");
-  const [latitude, setLatitude] = useState(spot.latitude || "");
+  const [lat, setLat] = useState(spot.lat || "");
+  const [lng, setLng] = useState(spot.lng || "");
   const [price, setPrice] = useState(spot.price || "");
   const [description, setDescription] = useState(spot.description || "");
   const [image, setImage] = useState(null);
@@ -27,12 +27,12 @@ function SpotFormModal({ spot = {} }) {
     const spotData = {
       name,
       location,
-      street,
+      address,
       city,
       state,
       country,
-      longitude,
-      latitude,
+      lat,
+      lng,
       price,
       description,
       previewImage: image,
@@ -75,11 +75,11 @@ function SpotFormModal({ spot = {} }) {
             />
           </label>
           <label>
-            Street
+            Address
             <input
               type="text"
-              value={street}
-              onChange={(e) => setStreet(e.target.value)}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               required
             />
           </label>
@@ -114,8 +114,8 @@ function SpotFormModal({ spot = {} }) {
             Latitude
             <input
               type="number"
-              value={latitude}
-              onChange={(e) => setLatitude(e.target.value)}
+              value={lat}
+              onChange={(e) => setLat(e.target.value)}
               required
             />
           </label>
@@ -123,8 +123,8 @@ function SpotFormModal({ spot = {} }) {
             Longitude
             <input
               type="number"
-              value={longitude}
-              onChange={(e) => setLongitude(e.target.value)}
+              value={lng}
+              onChange={(e) => setLng(e.target.value)}
               required
             />
           </label>

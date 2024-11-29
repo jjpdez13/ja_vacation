@@ -1,0 +1,111 @@
+frontend/src/components/SpotsListPage/SpotsList.css
+
+/* General Reset */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background-color: #f7f7f7;
+}
+
+/* Container for the Spots List Page */
+.spots-list-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Title Header */
+.spots-list-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #222;
+}
+
+/* Grid for Spots */
+.spots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Individual Spot Card */
+.spot-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.spot-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Spot Image */
+.spot-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Spot Details */
+.spot-details {
+    padding: 15px;
+}
+
+.spot-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.spot-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.spot-price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #e63946;
+}
+
+/* Call to Action */
+.book-now-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ff385c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.book-now-button:hover {
+    background-color: #d32d4c;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .spots-list-title {
+        font-size: 1.5rem;
+    }
+
+    .spot-card {
+        margin: 0 10px;
+    }
+}

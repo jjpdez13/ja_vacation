@@ -1,1 +1,1 @@
-// export { default } from './SpotsListPage';
+export { default } from './SpotsListPage';

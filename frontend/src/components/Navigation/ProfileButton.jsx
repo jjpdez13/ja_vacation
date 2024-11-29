@@ -5,7 +5,6 @@ import flash from "../../assets/images/IMG_0258.png";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
-import SpotFormModal from "../SpotFormModal";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -63,12 +62,6 @@ function ProfileButton({ user }) {
             <li>{user.email}</li>
             <li>
               <button onClick={logout}>Log Out</button>
-            </li>
-            <li>
-              <OpenModalButton
-                buttonText="Create Spot"
-                modalComponent={<SpotFormModal />}
-              />
             </li>
           </>
         ) : (

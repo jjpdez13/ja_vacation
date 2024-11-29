@@ -7,9 +7,9 @@ const LOAD_SPOT_DETAILS = "spots/loadSpotDetails";
 const REMOVE_SPOT = "spots/deleteSpot";
 
 // Action Creators
-const loadSpots = (spotsList) => ({
+const loadSpots = (Spots) => ({
   type: LOAD_SPOTS,
-  payload: spotsList,
+  payload: Spots,
 });
 
 const loadSpotDetails = (spot) => ({
@@ -30,10 +30,9 @@ const removeSpot = (spotId) => ({
 // Thunk Action: Load Spots
 export const getSpots = () => async (dispatch) => {
   const res = await csrfFetch("/api/spots");
-
   const list = await res.json();
+
   dispatch(loadSpots(list.Spots));
-  return list;
 };
 
 // Thunk Action: Load Spot Details
@@ -67,8 +66,8 @@ export const deleteSpot = (spotId) => async (dispatch) => {
 
 // Initial State
 const initialState = {
-  spots: {},
-  spot: null,
+  allSpots: {},
+  singleSpot: null,
 };
 
 // Reducer
@@ -79,16 +78,16 @@ const spotsReducer = (state = initialState, action) => {
       action.payload.forEach((spot) => {
         spotsObj[spot.id] = spot;
       });
-      return { ...state, spots: spotsObj };
+      return { ...state, allSpots: spotsObj };
     }
     case LOAD_SPOT_DETAILS:
-      return { ...state, spot: action.payload };
+      return { ...state, singleSpot: action.payload };
     case ADD_SPOT:
-      return { ...state, spot: action.payload };
+      return { ...state, singleSpot: action.payload };
     case REMOVE_SPOT: {
-      const newSpots = { ...state.spots };
+      const newSpots = { ...state.allSpots };
       delete newSpots[action.payload];
-      return { ...state, spots: newSpots, spot: null };
+      return { ...state, allSpots: newSpots, singleSpot: null };
     }
     default:
       return state;

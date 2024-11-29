@@ -4,13 +4,19 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { spotActions } from "../../store";
-import './SpotForm.css';
+import "./SpotForm.css";
 
 function SpotFormModal({ spot = {} }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
   const [name, setName] = useState(spot.name || "");
   const [location, setLocation] = useState(spot.location || "");
+  const [street, setStreet] = useState(spot.street || "");
+  const [city, setCity] = useState(spot.city || "");
+  const [state, setState] = useState(spot.state || "");
+  const [country, setCountry] = useState(spot.country || "");
+  const [longitude, setLongitude] = useState(spot.longitude || "");
+  const [latitude, setLatitude] = useState(spot.latitude || "");
   const [price, setPrice] = useState(spot.price || "");
   const [description, setDescription] = useState(spot.description || "");
   const [image, setImage] = useState(null);
@@ -18,7 +24,19 @@ function SpotFormModal({ spot = {} }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const spotData = { name, location, price, description, previewImage: image };
+    const spotData = {
+      name,
+      location,
+      street,
+      city,
+      state,
+      country,
+      longitude,
+      latitude,
+      price,
+      description,
+      previewImage: image,
+    };
 
     try {
       if (spot.id) {
@@ -36,53 +54,111 @@ function SpotFormModal({ spot = {} }) {
   return (
     <>
       <h1>{spot.id ? "Edit Spot" : "Create Spot"}</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Location
-          <input
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Price
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Description
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Preview Image
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
-            required={!spot.id}
-          />
-        </label>
+      <form onSubmit={handleSubmit} className="form-container">
+        <div className="form-cnotent">
+          <label>
+            Name
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Location
+            <input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Street
+            <input
+              type="text"
+              value={street}
+              onChange={(e) => setStreet(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            City
+            <input
+              type="text"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            State
+            <input
+              type="text"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Country
+            <input
+              type="text"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Latitude
+            <input
+              type="number"
+              value={latitude}
+              onChange={(e) => setLatitude(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Longitude
+            <input
+              type="number"
+              value={longitude}
+              onChange={(e) => setLongitude(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Price
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Description
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Preview Image
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+              required={!spot.id}
+            />
+          </label>
+        </div>
         {Object.values(errors).map((error, idx) => (
-          <p key={idx} className="error">{error}</p>
+          <p key={idx} className="error">
+            {error}
+          </p>
         ))}
         <button type="submit">{spot.id ? "Update Spot" : "Create Spot"}</button>
       </form>

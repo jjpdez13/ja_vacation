@@ -470,7 +470,7 @@ router.get("/:spotId/bookings", requireAuth, async (req, res) => {
     });
   }
 
-  // Fetch all bookings for the spot
+  // Get all bookings for the spot
   const bookings = await Booking.findAll({
     where: { spotId: spotId },
     include: [

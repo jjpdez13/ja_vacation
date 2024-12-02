@@ -363,8 +363,6 @@ router.get("/:spotid/reviews", async (req, res) => {
   // Check if the spot exists
   const spot = await Spot.findByPk(Number(spotid));
 
-  console.log(spot);
-
   if (!spot) {
     return res.status(404).json({
       message: "Spot couldn't be found",

@@ -16,7 +16,6 @@ const SpotsListPage = () => {
   }, [dispatch]);
 
   const spotsArr = Object.values(spots || {});
-  console.log("Spots array:", spotsArr);
 
   return (
     <div className="spots-list-container">

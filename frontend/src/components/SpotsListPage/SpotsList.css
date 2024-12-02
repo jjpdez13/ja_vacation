@@ -1,0 +1,87 @@
+/* frontend/src/components/SpotsListPage/SpotsList.css */
+
+.spots-list-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Center the title */
+.spots-list-header {
+    display: flex;
+    flex-direction: column; /* Stack title and button vertically */
+    align-items: center; /* Center-align both the title and the button */
+    margin-bottom: 50px;
+}
+
+/* Add spacing between the title and the button */
+.spots-list-header h1 {
+    margin-bottom: 50px; /* Add some spacing below the title */
+    text-align: center; /* Center the text of the title */
+}
+
+/* Style for the button (optional, if needed) */
+.spots-list-header button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.spots-list-header button:hover {
+    background-color: #0056b3;
+}
+  
+  .spots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .spot-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .spot-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .spot-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .spot-info {
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .spot-info h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .spot-info p {
+    font-size: 0.9rem;
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .spot-info p:last-child {
+    font-weight: bold;
+    color: #e63946;
+  }

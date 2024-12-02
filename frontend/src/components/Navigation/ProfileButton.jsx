@@ -45,12 +45,13 @@ function ProfileButton({ user }) {
       <button
         onClick={toggleMenu}
         style={{ background: "none", cursor: "pointer" }}
-      >
+      > PROFILE
         <img
           src={flash}
           alt="Profile"
           style={{ width: "55px", height: "73px" }}
         />
+        BUTTON
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (

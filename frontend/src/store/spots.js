@@ -1,10 +1,12 @@
-// frontend/src/store/session.js
+// frontend/src/store/spots.js
+
 import { csrfFetch } from "./csrf";
 
 const ADD_SPOT = "spots/addSpot";
 const LOAD_SPOTS = "spots/loadSpots";
 const LOAD_SPOT_DETAILS = "spots/loadSpotDetails";
 const REMOVE_SPOT = "spots/deleteSpot";
+const UPDATE_SPOT = "spots/updateSpot";
 
 // Action Creators
 const loadSpots = (Spots) => ({
@@ -25,6 +27,11 @@ const addSpot = (spotData) => ({
 const removeSpot = (spotId) => ({
   type: REMOVE_SPOT,
   payload: spotId,
+});
+
+const reviseSpot = (spot) => ({
+  type: UPDATE_SPOT,
+  payload: spot,
 });
 
 // Thunk Action: Load Spots
@@ -64,6 +71,19 @@ export const deleteSpot = (spotId) => async (dispatch) => {
   dispatch(removeSpot(res));
 };
 
+// Thunk Action: Update A Spot
+export const updateSpot = (spotData) => async (dispatch) => {
+  const { id, ...data } = spotData;
+  const res = await csrfFetch(`/api/spots/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(spotData),
+  });
+
+  const updatedSpot = await res.json();
+  dispatch(updateSpot(updatedSpot));
+  return updatedSpot;
+};
+
 // Initial State
 const initialState = {
   allSpots: {},
@@ -88,6 +108,14 @@ const spotsReducer = (state = initialState, action) => {
       const newSpots = { ...state.allSpots };
       delete newSpots[action.payload];
       return { ...state, allSpots: newSpots, singleSpot: null };
+    }
+    case UPDATE_SPOT: {
+      const updatedSpot = action.payload;
+      return {
+        ...state,
+        allSpots: { ...state.allSpots, [updatedSpot.id]: updatedSpot },
+        singleSpot: updatedSpot,
+      };
     }
     default:
       return state;

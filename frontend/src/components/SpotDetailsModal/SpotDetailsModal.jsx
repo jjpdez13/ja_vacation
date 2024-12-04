@@ -10,7 +10,9 @@ function SpotDetailsModal() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const spot = useSelector((state) => state.spots.singleSpot);
+  const spot = useSelector((state) => state.spots.singleSpot.details);
+  const reviews = useSelector((state) => state.spots.singleSpot.reviews);
+  const reviewsArr = Object.values(reviews || {});
   const user = useSelector((state) => state.session.user);
   const isOwner = user?.id === spot?.ownerId;
   const [isEditing, setIsEditing] = useState(false);
@@ -27,7 +29,8 @@ function SpotDetailsModal() {
   // Fetch spot details
   useEffect(() => {
     if (spotId) {
-      dispatch(spotActions.getSpotDetails(spotId));
+        dispatch(spotActions.getSpotDetails(spotId));
+        dispatch(spotActions.getReviews(spotId));
     }
   }, [dispatch, spotId]);
 
@@ -188,6 +191,23 @@ function SpotDetailsModal() {
           <p>
             <strong>Price:</strong> ${price}
           </p>
+                      <h2>Reviews</h2>
+                      <ul>
+                          {reviewsArr.length === 0 ? (
+                              <p>No reviews yet. Be the first to leave one!</p>
+                          ) : (
+                                  reviewsArr.map((review) => (
+                                      <li key={review.id}>
+                                          <p>{review.review}</p>
+                                          <p>Rating: {review.stars}</p>
+                                          <p>
+                                              {review.User.firstName} {review.User.lastName[0]}.
+                                          </p>
+                                      </li>
+                                  ))
+                          )}
+
+                      </ul>
           {isOwner && (
             <button className="edit-button" onClick={() => setIsEditing(true)}>
               Edit

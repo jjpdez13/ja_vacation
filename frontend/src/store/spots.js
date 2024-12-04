@@ -5,6 +5,7 @@ import { csrfFetch } from "./csrf";
 const ADD_SPOT = "spots/addSpot";
 const LOAD_SPOTS = "spots/loadSpots";
 const LOAD_SPOT_DETAILS = "spots/loadSpotDetails";
+const LOAD_REVIEWS = "spots/loadReviews";
 const REMOVE_SPOT = "spots/deleteSpot";
 const UPDATE_SPOT = "spots/updateSpot";
 
@@ -17,6 +18,11 @@ const loadSpots = (Spots) => ({
 const loadSpotDetails = (spot) => ({
   type: LOAD_SPOT_DETAILS,
   payload: spot,
+});
+
+const loadReviews = (spotId, reviews) => ({
+  type: LOAD_REVIEWS,
+  payload: { spotId, reviews },
 });
 
 const addSpot = (spotData) => ({
@@ -49,6 +55,13 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
   const spot = await res.json();
   dispatch(loadSpotDetails(spot));
   return spot;
+};
+
+// Thunk Action: Load Reviews
+export const getReviews = (spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
+  const { Reviews } = await res.json();
+  dispatch(loadReviews(spotId, Reviews));
 };
 
 // Thunk Action: Add A Spot
@@ -87,7 +100,10 @@ export const updateSpot = (spotData) => async (dispatch) => {
 // Initial State
 const initialState = {
   allSpots: {},
-  singleSpot: null,
+  singleSpot: {
+    details: {},
+    reviews: {},
+  },
 };
 
 // Reducer
@@ -100,8 +116,30 @@ const spotsReducer = (state = initialState, action) => {
       });
       return { ...state, allSpots: spotsObj };
     }
-    case LOAD_SPOT_DETAILS:
-      return { ...state, singleSpot: action.payload };
+    case LOAD_SPOT_DETAILS: {
+      const { reviews, ...spotDetails } = action.payload;
+      return {
+        ...state,
+        singleSpot: {
+          details: spotDetails,
+          reviews: state.singleSpot.reviews || {},
+        },
+      };
+      }
+      case LOAD_REVIEWS: {
+          const { spotId, reviews } = action.payload;
+          const reviewsById = reviews.reduce((acc, review) => {
+              acc[review.id] = review;
+              return acc;
+          }, {});
+          return {
+              ...state,
+              singleSpot: {
+                  ...state.singleSpot,
+                  reviews: reviewsById,
+              },
+          };
+    }
     case ADD_SPOT:
       return { ...state, singleSpot: action.payload };
     case REMOVE_SPOT: {

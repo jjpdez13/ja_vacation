@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { sessionActions } from "./store";
-import { Navigation, SpotDetailsModal, SpotsListPage } from "./components";
+import { Navigation, SpotDetailsModal, SpotsListPage, ReviewsList } from "./components";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -35,7 +35,9 @@ const router = createBrowserRouter(
       <Route element={<Layout />}>
         <Route path="/" element={<h1>Welcome!</h1>} />
         <Route path="/spots" element={<SpotsListPage />} />
-        <Route path="/spots/:spotId" element={<SpotDetailsModal />} />
+        <Route path="/spots/:spotId" element={<SpotDetailsModal />}>
+        <Route path="" element={<ReviewsList />}/>
+        </Route>
       </Route>
     </>
   )

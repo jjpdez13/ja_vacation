@@ -5,24 +5,18 @@ import { csrfFetch } from "./csrf";
 const ADD_SPOT = "spots/addSpot";
 const LOAD_SPOTS = "spots/loadSpots";
 const LOAD_SPOT_DETAILS = "spots/loadSpotDetails";
-const LOAD_REVIEWS = "spots/loadReviews";
 const REMOVE_SPOT = "spots/deleteSpot";
 const UPDATE_SPOT = "spots/updateSpot";
 
 // Action Creators
-const loadSpots = (Spots) => ({
+const loadSpots = (spots) => ({
   type: LOAD_SPOTS,
-  payload: Spots,
+  payload: spots,
 });
 
 const loadSpotDetails = (spot) => ({
   type: LOAD_SPOT_DETAILS,
   payload: spot,
-});
-
-const loadReviews = (spotId, reviews) => ({
-  type: LOAD_REVIEWS,
-  payload: { spotId, reviews },
 });
 
 const addSpot = (spotData) => ({
@@ -33,11 +27,6 @@ const addSpot = (spotData) => ({
 const removeSpot = (spotId) => ({
   type: REMOVE_SPOT,
   payload: spotId,
-});
-
-const reviseSpot = (spot) => ({
-  type: UPDATE_SPOT,
-  payload: spot,
 });
 
 // Thunk Action: Load Spots
@@ -51,17 +40,8 @@ export const getSpots = () => async (dispatch) => {
 // Thunk Action: Load Spot Details
 export const getSpotDetails = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
-
   const spot = await res.json();
   dispatch(loadSpotDetails(spot));
-  return spot;
-};
-
-// Thunk Action: Load Reviews
-export const getReviews = (spotId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
-  const { Reviews } = await res.json();
-  dispatch(loadReviews(spotId, Reviews));
 };
 
 // Thunk Action: Add A Spot
@@ -86,7 +66,7 @@ export const deleteSpot = (spotId) => async (dispatch) => {
 
 // Thunk Action: Update A Spot
 export const updateSpot = (spotData) => async (dispatch) => {
-  const { id, ...data } = spotData;
+  const { id } = spotData;
   const res = await csrfFetch(`/api/spots/${id}`, {
     method: "PUT",
     body: JSON.stringify(spotData),
@@ -102,7 +82,6 @@ const initialState = {
   allSpots: {},
   singleSpot: {
     details: {},
-    reviews: {},
   },
 };
 
@@ -117,28 +96,13 @@ const spotsReducer = (state = initialState, action) => {
       return { ...state, allSpots: spotsObj };
     }
     case LOAD_SPOT_DETAILS: {
-      const { reviews, ...spotDetails } = action.payload;
+      const { ...spotDetails } = action.payload;
       return {
         ...state,
         singleSpot: {
           details: spotDetails,
-          reviews: state.singleSpot.reviews || {},
         },
       };
-      }
-      case LOAD_REVIEWS: {
-          const { spotId, reviews } = action.payload;
-          const reviewsById = reviews.reduce((acc, review) => {
-              acc[review.id] = review;
-              return acc;
-          }, {});
-          return {
-              ...state,
-              singleSpot: {
-                  ...state.singleSpot,
-                  reviews: reviewsById,
-              },
-          };
     }
     case ADD_SPOT:
       return { ...state, singleSpot: action.payload };

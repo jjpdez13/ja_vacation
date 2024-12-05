@@ -1,8 +1,11 @@
+// frontend/src/components/SpotDetailsModal/SpotDetailsModal.jsx
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useModal } from "../../context/Modal";
-import { spotActions } from "../../store";
+import { reviewActions, spotActions } from "../../store";
+import ReviewsList from "../ReviewsList";
 import "./SpotDetails.css";
 
 function SpotDetailsModal() {
@@ -10,9 +13,8 @@ function SpotDetailsModal() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const spot = useSelector((state) => state.spots.singleSpot.details);
-  const reviews = useSelector((state) => state.spots.singleSpot.reviews);
-  const reviewsArr = Object.values(reviews || {});
+    const spot = useSelector((state) => state.spots.singleSpot.details);
+    console.log("Spot details: ", spot);
   const user = useSelector((state) => state.session.user);
   const isOwner = user?.id === spot?.ownerId;
   const [isEditing, setIsEditing] = useState(false);
@@ -25,19 +27,22 @@ function SpotDetailsModal() {
   const [lng, setLng] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [setError] = useState({});
 
   // Fetch spot details
   useEffect(() => {
     if (spotId) {
-        dispatch(spotActions.getSpotDetails(spotId));
-        dispatch(spotActions.getReviews(spotId));
+      console.log("Rendering SpotDetailsModal with spotId:", spotId);
+      console.log("Spot owner ID:", spot?.ownerId);
+      console.log("Current user ID:", user?.id);
+      dispatch(spotActions.getSpotDetails(spotId));
+      dispatch(reviewActions.getReviews(spotId));
     }
   }, [dispatch, spotId]);
 
-  // Populate state with spot data once it's loaded
   useEffect(() => {
     if (spot) {
-      id: spot.id, setName(spot.name || "");
+      setName(spot.name || "");
       setAddress(spot.address || "");
       setCity(spot.city || "");
       setState(spot.state || "");
@@ -67,8 +72,10 @@ function SpotDetailsModal() {
     try {
       await dispatch(spotActions.updateSpot({ ...updatedSpot, id: spot.id }));
       setIsEditing(false); // Exit editing mode after successful update
+      setError(null);
     } catch (err) {
       console.error("Failed to update spot:", err);
+      setError("Failed to update spot. Please try again.");
     }
   };
 
@@ -191,28 +198,14 @@ function SpotDetailsModal() {
           <p>
             <strong>Price:</strong> ${price}
           </p>
-                      <h2>Reviews</h2>
-                      <ul>
-                          {reviewsArr.length === 0 ? (
-                              <p>No reviews yet. Be the first to leave one!</p>
-                          ) : (
-                                  reviewsArr.map((review) => (
-                                      <li key={review.id}>
-                                          <p>{review.review}</p>
-                                          <p>Rating: {review.stars}</p>
-                                          <p>
-                                              {review.User.firstName} {review.User.lastName[0]}.
-                                          </p>
-                                      </li>
-                                  ))
-                          )}
-
-                      </ul>
           {isOwner && (
             <button className="edit-button" onClick={() => setIsEditing(true)}>
               Edit
             </button>
           )}
+          <h2>Reviews</h2>
+          <ReviewsList spotId={spotId} ownerId={spot?.ownerId} />
+          <Outlet />
         </>
       )}
     </div>

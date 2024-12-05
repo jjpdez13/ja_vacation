@@ -1,3 +1,5 @@
+// frontend/src/main.jsx
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
@@ -9,6 +11,7 @@ import {
   spotActions,
   restoreCSRF,
   csrfFetch,
+  reviewActions,
 } from "./store";
 import { ModalProvider, Modal } from "./context/Modal";
 
@@ -23,6 +26,7 @@ if (import.meta.env.MODE !== "production") {
   window.store = store;
   window.sessionActions = sessionActions;
   window.spotActions = spotActions;
+  window.reviewActions = reviewActions;
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(

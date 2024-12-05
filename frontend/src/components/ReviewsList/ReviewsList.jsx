@@ -1,59 +1,64 @@
+// frontend/src/components/ReviewsList/ReviewsList.jsx
+
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { reviewActions } from "../../store";
-import { NavLink, useParams } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
-// import ReviewFormModal from "../ReviewFormModal";
+import ReviewsFormModal from "../ReviewsFormModal";
 import "./ReviewsList.css";
 
-const ReviewsList = () => {
-  const { spotId } = useParams();
+const ReviewsList = ({ spotId, ownerId }) => {
   const dispatch = useDispatch();
-  const reviews = useSelector((state) => state.reviews.allReviews);
-  const users = useSelector((state) => state.users);
+  const reviews = useSelector((state) => state.reviews.allReviews[spotId]);
   const user = useSelector((state) => state.session.user);
+  const reviewsArr = Object.values(reviews || {});
+
+  console.log("Rendering ReviewsList for spotId:", spotId); // Check prop passing
+  console.log("Reviews from Redux state:", reviews); // Check Redux state content
+  console.log("Mapped reviews array:", reviewsArr); // Check if mapping is working
 
   useEffect(() => {
     if (spotId) {
+      console.log("Fetching reviews for spotId:", spotId);
       dispatch(reviewActions.getReviews(spotId));
-      dispatch(reviewActions.getUsers());
     }
   }, [dispatch, spotId]);
 
-  const reviewsArr = Object.values(reviews || {});
+  if (!spotId) {
+    console.log("No spotId provided. Not rendering ReviewsList.");
+    return null;
+  }
 
   return (
-    <div className="reviews-list-container">
-      <header className="reviews-list-header">
-        <h1>Reviews</h1>
-        {user && (
+    <ul className="reviews-list">
+      {reviewsArr.length === 0 ? (
+        <li>
+          <p>No reviews yet. Be the first to leave one!</p>
+        </li>
+      ) : (
+        reviewsArr.map((review) => (
+          <li key={`${review.id}-${spotId}`}>
+            <p>Review: {review.review || "No review content"}</p>
+                <p>Rating: {review.stars || "No rating"}</p>
+                <p>By: {review.User?.firstName} { review.User?.lastName[0] }.</p>
+            {user?.id === review.userId && (
+              <OpenModalButton
+                buttonText="Edit Review"
+                modalComponent={<ReviewsFormModal review={review} />}
+              />
+            )}
+          </li>
+        ))
+      )}
+      {reviewsArr.length > 0 && user?.id !== ownerId && (
+        <li>
           <OpenModalButton
-            buttonText="Create Review"
-            modalComponent={<ReviewFormModal />}
+            buttonText="Create A Review"
+            modalComponent={<ReviewsFormModal />}
           />
-        )}
-      </header>
-      <ul className="reviews-grid">
-        {reviewsArr.map((review) => {
-          const author = users[review.userId];
-          return (
-            <li key={review.id} className="review-card">
-              <NavLink to={`/reviews/${review.id}`}>
-                <div className="review-info">
-                  <h2>{review.review}</h2>
-                  {author && (
-                    <p className="review-author">
-                      {author.firstName} {author.lastName[0]}.
-                    </p>
-                  )}
-                  <p>Rating: {review.stars}</p>
-                </div>
-              </NavLink>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+        </li>
+      )}
+    </ul>
   );
 };
 

@@ -1,3 +1,5 @@
+// frontend/src/components/SpotsListPage/SpotsListPage.jsx
+
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { spotActions } from "../../store";
@@ -33,7 +35,7 @@ const SpotsListPage = () => {
           <li key={spot.id} className="spot-card">
             <NavLink to={`/spots/${spot.id}`}>
               <img
-                src={spot.previewImage}
+                src={spot.previewImage || "/placeholder.jpg"}
                 alt={spot.name}
                 className="spot-image"
               />

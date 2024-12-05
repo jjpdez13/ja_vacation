@@ -1,27 +1,15 @@
-// frontend/src/store/reviews.js
-
 import { csrfFetch } from "./csrf";
 
-const LOAD_USERS = "reviews/loadUsers";
 const ADD_REVIEW = "reviews/addReview";
 const LOAD_REVIEWS = "reviews/loadReviews";
-const LOAD_REVIEW_DETAILS = "reviews/loadReviewDetails";
 const REMOVE_REVIEW = "reviews/deleteReview";
 const UPDATE_REVIEW = "reviews/updateReview";
 
 // Action Creators
-const loadUsers = (users) => ({
-  type: LOAD_USERS,
-  payload: users,
-});
 const loadReviews = (spotId, reviews) => ({
   type: LOAD_REVIEWS,
-  payload: {spotId, reviews},
-});
-
-const loadReviewDetails = (review) => ({
-  type: LOAD_REVIEW_DETAILS,
-  payload: review,
+  spotId,
+  reviews,
 });
 
 const addReview = (reviewData) => ({
@@ -29,9 +17,9 @@ const addReview = (reviewData) => ({
   payload: reviewData,
 });
 
-const removeReview = (reviewId) => ({
+const removeReview = (reviewId, spotId) => ({
   type: REMOVE_REVIEW,
-  payload: reviewId,
+  payload: { reviewId, spotId },
 });
 
 const reviseReview = (review) => ({
@@ -39,60 +27,66 @@ const reviseReview = (review) => ({
   payload: review,
 });
 
-// Thunk Action: Load Users
-export const getUsers = (spotId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
-  const list = await res.json();
-  dispatch(loadUsers(list.reviews));
-};
-
 // Thunk Action: Load Reviews
 export const getReviews = (spotId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
-  const list = await res.json();
-  dispatch(loadReviews(list));
-};
-
-// Thunk Action: Load Review Details
-export const getReviewDetails = (reviewId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/reviews/${reviewId}`);
-
-  const review = await res.json();
-  dispatch(loadReviewDetails(review));
-  return review;
+  try {
+    const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
+    if (!res.ok) throw new Error("Failed to fetch reviews.");
+    const list = await res.json();
+    dispatch(loadReviews(spotId, list));
+  } catch (err) {
+    console.error("Error loading reviews:", err);
+    throw err;
+  }
 };
 
 // Thunk Action: Add A Review
 export const createReview = (reviewData) => async (dispatch) => {
-  const res = await csrfFetch(`/api/reviews`, {
-    method: "POST",
-    body: JSON.stringify(reviewData),
-  });
-
-  const review = await res.json();
-  dispatch(addReview(review));
-  return review;
+  try {
+    const res = await csrfFetch(`/api/reviews`, {
+      method: "POST",
+      body: JSON.stringify(reviewData),
+    });
+    if (!res.ok) throw new Error("Failed to create review.");
+    const review = await res.json();
+    dispatch(addReview(review));
+    return review;
+  } catch (err) {
+    console.error("Error creating review:", err);
+    throw err;
+  }
 };
 
 // Thunk Action: Delete A Review
-export const deleteReview = (reviewId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/reviews/${reviewId}`, {
-    method: "DELETE",
-  });
-  dispatch(removeReview(res));
+export const deleteReview = (reviewId, spotId) => async (dispatch) => {
+  try {
+    const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Failed to delete review.");
+    dispatch(removeReview(reviewId, spotId));
+  } catch (err) {
+    console.error("Error deleting review:", err);
+    throw err;
+  }
 };
 
 // Thunk Action: Update A Review
 export const updateReview = (reviewData) => async (dispatch) => {
-  const { id, ...data } = reviewData;
-  const res = await csrfFetch(`/api/reviews/${id}`, {
-    method: "PUT",
-    body: JSON.stringify(reviewData),
-  });
-
-  const updatedReview = await res.json();
-  dispatch(reviseReview(updatedReview));
-  return updatedReview;
+  const { id } = reviewData;
+  try {
+    const res = await csrfFetch(`/api/reviews/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(reviewData),
+    });
+    if (!res.ok) throw new Error("Failed to update review.");
+    const updatedReview = await res.json();
+    dispatch(reviseReview(updatedReview));
+    return updatedReview;
+  } catch (err) {
+    console.error("Error updating review:", err);
+    throw err;
+  }
 };
 
 // Initial State
@@ -103,32 +97,56 @@ const initialState = {
 
 // Reducer
 const reviewsReducer = (state = initialState, action) => {
+    console.log("Action payload for LOAD_REVIEWS:", action);
   switch (action.type) {
-    case LOAD_USERS: {
-      return { ...state, users };
-    }
     case LOAD_REVIEWS: {
-      const reviewsObj = {};
-      const reviewsArray = action.payload.Reviews; // Access the array from the Reviews key
-      reviewsArray.forEach((review) => {
-        reviewsObj[review.id] = review; // Populate the object
-      });
-      return { ...state, allReviews: reviewsObj };
+      return {
+        ...state,
+        allReviews: {
+          ...state.allReviews,
+          [action.spotId]: action.reviews.Reviews,
+        },
+      };
     }
-    case LOAD_REVIEW_DETAILS:
-      return { ...state, singleReview: action.payload };
-    case ADD_REVIEW:
-      return { ...state, singleReview: action.payload };
-    case REMOVE_REVIEW: {
+    case ADD_REVIEW: {
       const newReviews = { ...state.allReviews };
-      delete newReviews[action.payload];
-      return { ...state, allReviews: newReviews, singleReview: null };
+      const spotReviews = newReviews[action.payload.spotId] || [];
+      return {
+        ...state,
+        allReviews: {
+          ...newReviews,
+          [action.payload.spotId]: [...spotReviews, action.payload],
+        },
+        singleReview: action.payload,
+      };
+    }
+    case REMOVE_REVIEW: {
+      const { reviewId, spotId } = action.payload;
+      const newReviews = { ...state.allReviews };
+      if (newReviews[spotId]) {
+        newReviews[spotId] = newReviews[spotId].filter(
+          (review) => review.id !== reviewId
+        );
+      }
+      return {
+        ...state,
+        allReviews: newReviews,
+        singleReview: null,
+      };
     }
     case UPDATE_REVIEW: {
       const updatedReview = action.payload;
+      const newReviews = { ...state.allReviews };
+      if (newReviews[updatedReview.spotId]) {
+        newReviews[updatedReview.spotId] = newReviews[
+          updatedReview.spotId
+        ].map((review) =>
+          review.id === updatedReview.id ? updatedReview : review
+        );
+      }
       return {
         ...state,
-        allReviews: { ...state.allReviews, [updatedReview.id]: updatedReview },
+        allReviews: newReviews,
         singleReview: updatedReview,
       };
     }

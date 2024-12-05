@@ -19,9 +19,9 @@ const loadSpotDetails = (spot) => ({
   payload: spot,
 });
 
-const addSpot = (spotData) => ({
+const addSpot = (spot) => ({
   type: ADD_SPOT,
-  payload: spotData,
+  spot,
 });
 
 const removeSpot = (spotId) => ({
@@ -46,22 +46,35 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
 
 // Thunk Action: Add A Spot
 export const createSpot = (spotData) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots`, {
-    method: "POST",
-    body: JSON.stringify(spotData),
-  });
-
-  const spot = await res.json();
-  dispatch(addSpot(spot));
-  return spot;
+  try {
+    const res = await csrfFetch(`/api/spots`, {
+      method: "POST",
+      body: JSON.stringify(spotData),
+    });
+    if (!res.ok) throw new Error("Failed to create spot.");
+    const newSpot = await res.json();
+    // Dispatch action to add the new spot to the Redux store
+    dispatch(addSpot(newSpot));
+    return newSpot; // Return the new spot to handle navigation or UI feedback
+  } catch (err) {
+    console.error("Error creating spot:", err);
+    throw err;
+  }
 };
 
 // Thunk Action: Delete A Spot
 export const deleteSpot = (spotId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spotId}`, {
-    method: "DELETE",
-  });
-  dispatch(removeSpot(res));
+  try {
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Failed to delete spot.");
+    // Dispatch action to remove spot from Redux store
+    dispatch(removeSpot(spotId));
+  } catch (err) {
+    console.error("Error deleting spot:", err);
+    throw err;
+  }
 };
 
 // Thunk Action: Update A Spot
@@ -105,7 +118,14 @@ const spotsReducer = (state = initialState, action) => {
       };
     }
     case ADD_SPOT:
-      return { ...state, singleSpot: action.payload };
+      return {
+        ...state,
+        allSpots: {
+          ...state.allSpots,
+          [action.spot.id]: action.spot,
+        },
+        singleSpot: action.spot
+      };
     case REMOVE_SPOT: {
       const newSpots = { ...state.allSpots };
       delete newSpots[action.payload];

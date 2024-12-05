@@ -41,9 +41,9 @@ export const getReviews = (spotId) => async (dispatch) => {
 };
 
 // Thunk Action: Add A Review
-export const createReview = (reviewData) => async (dispatch) => {
+export const createReview = (spotId, reviewData) => async (dispatch) => {
   try {
-    const res = await csrfFetch(`/api/reviews`, {
+    const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
       method: "POST",
       body: JSON.stringify(reviewData),
     });

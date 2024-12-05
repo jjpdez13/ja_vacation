@@ -4,15 +4,16 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { reviewActions } from "../../store";
+import { useParams } from "react-router";
 import "./ReviewsForm.css";
 
-function ReviewsFormModal({ review = {} }) {
+function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
-  const author = useSelector((state) => {
-  const user = state.session.user;
-  return `${user.firstName} ${user.lastName[0]}.`;
-});
+  const { spotId: paramSpotId } = useParams();
+  const spotId = propSpotId || paramSpotId;
+  const user = useSelector((state) => state.session.user);
+  const author = `${user.firstName} ${user.lastName[0]}.`;
   const [content, setContent] = useState(review?.review || "");
   const [rating, setRating] = useState(review?.stars || "");
   const [image, setImage] = useState(null);
@@ -21,9 +22,10 @@ function ReviewsFormModal({ review = {} }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const reviewData = {
-      content,
+      review: content,
       stars: rating,
       reviewImage: image,
+      user,
     };
 
     try {
@@ -32,12 +34,16 @@ function ReviewsFormModal({ review = {} }) {
           reviewActions.updateReview({ ...reviewData, id: review.id })
         );
       } else {
-        await dispatch(reviewActions.createReview(reviewData));
+        await dispatch(reviewActions.createReview(spotId, reviewData));
       }
       closeModal();
-    } catch (res) {
-      const data = await res.json();
-      if (data?.errors) setErrors(data.errors);
+    } catch (error) {
+      if (error.json) {
+        const data = await error.json();
+        if (data?.errors) setErrors(data.errors);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 

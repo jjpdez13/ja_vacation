@@ -13,8 +13,7 @@ function SpotDetailsModal() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-    const spot = useSelector((state) => state.spots.singleSpot.details);
-    console.log("Spot details: ", spot);
+  const spot = useSelector((state) => state.spots.singleSpot.details);
   const user = useSelector((state) => state.session.user);
   const isOwner = user?.id === spot?.ownerId;
   const [isEditing, setIsEditing] = useState(false);
@@ -86,6 +85,16 @@ function SpotDetailsModal() {
   const handleClose = () => {
     closeModal();
     navigate("/spots");
+  };
+
+  const handleDelete = () => {
+    dispatch(spotActions.deleteSpot(spotId))
+      .then(() => {
+        console.log("Spot deleted:", spotId);
+        closeModal(); // Close the modal
+        navigate("/spots"); // Navigate back to the spots list page
+      })
+      .catch((err) => console.error("Failed to delete spot:", err));
   };
 
   return (
@@ -199,9 +208,17 @@ function SpotDetailsModal() {
             <strong>Price:</strong> ${price}
           </p>
           {isOwner && (
-            <button className="edit-button" onClick={() => setIsEditing(true)}>
-              Edit
-            </button>
+            <>
+              <button
+                className="edit-button"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit Spot
+              </button>
+              <button className="delete-button" onClick={handleDelete}>
+                Delete Spot
+              </button>
+            </>
           )}
           <h2>Reviews</h2>
           <ReviewsList spotId={spotId} ownerId={spot?.ownerId} />

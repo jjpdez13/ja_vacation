@@ -13,9 +13,13 @@ const ReviewsList = ({ spotId, ownerId }) => {
   const user = useSelector((state) => state.session.user);
   const reviewsArr = Object.values(reviews || {});
 
-  console.log("Rendering ReviewsList for spotId:", spotId); // Check prop passing
-  console.log("Reviews from Redux state:", reviews); // Check Redux state content
-  console.log("Mapped reviews array:", reviewsArr); // Check if mapping is working
+  const handleDelete = (reviewId) => {
+    dispatch(reviewActions.deleteReview(reviewId))
+      .then(() => {
+        console.log("Review deleted: ", reviewId);
+      })
+      .catch((err) => console.error("Failed to delete review: ", err));
+  };
 
   useEffect(() => {
     if (spotId) {
@@ -39,22 +43,32 @@ const ReviewsList = ({ spotId, ownerId }) => {
         reviewsArr.map((review) => (
           <li key={`${review.id}-${spotId}`}>
             <p>Review: {review.review || "No review content"}</p>
-                <p>Rating: {review.stars || "No rating"}</p>
-                <p>By: {review.User?.firstName} { review.User?.lastName[0] }.</p>
+            <p>Rating: {review.stars || "No rating"}</p>
+            <p>
+              By: {review.User?.firstName} {review.User?.lastName[0]}.
+            </p>
             {user?.id === review.userId && (
-              <OpenModalButton
-                buttonText="Edit Review"
-                modalComponent={<ReviewsFormModal review={review} />}
-              />
+              <>
+                <OpenModalButton
+                  buttonText="Edit Review"
+                  modalComponent={<ReviewsFormModal review={review} />}
+                />
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(review.id)}
+                >
+                  Delete Review
+                </button>
+              </>
             )}
           </li>
         ))
       )}
-      {reviewsArr.length > 0 && user?.id !== ownerId && (
+      {reviewsArr.length === 0 && user?.id !== ownerId && (
         <li>
           <OpenModalButton
             buttonText="Create A Review"
-            modalComponent={<ReviewsFormModal />}
+            modalComponent={<ReviewsFormModal spotId={ spotId } />}
           />
         </li>
       )}

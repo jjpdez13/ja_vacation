@@ -31,9 +31,6 @@ function SpotDetailsModal() {
   // Fetch spot details
   useEffect(() => {
     if (spotId) {
-      console.log("Rendering SpotDetailsModal with spotId:", spotId);
-      console.log("Spot owner ID:", spot?.ownerId);
-      console.log("Current user ID:", user?.id);
       dispatch(spotActions.getSpotDetails(spotId));
       dispatch(reviewActions.getReviews(spotId));
     }

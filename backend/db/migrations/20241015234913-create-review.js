@@ -55,6 +55,11 @@ module.exports = {
         type: Sequelize.DATE
       }
     }, options, {});
+    if (process.env.DATABASE_DIALECT === 'postgres') {
+      await queryInterface.sequelize.query(
+        `ALTER SEQUENCE "Reviews_id_seq" RESTART WITH 1;`
+      );
+    }
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Reviews", options);

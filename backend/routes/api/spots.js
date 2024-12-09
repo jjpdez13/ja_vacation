@@ -236,10 +236,23 @@ router.get("/:spotid", async (req, res) => {
 });
 
 // Create a Spot
+// Create a Spot
 router.post("/", requireAuth, validateSpot, async (req, res) => {
-  const { address, city, state, country, lat, lng, name, description, price } =
-    req.body;
+  const {
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    previewImage, // Add previewImage to the request body
+  } = req.body;
+
   try {
+    // Create the Spot
     const spot = await Spot.create({
       ownerId: req.user.id,
       address,
@@ -253,7 +266,25 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
       price,
     });
 
-    return res.status(201).json(spot);
+    // Create the SpotImage with preview: true
+    if (previewImage) {
+      await SpotImage.create({
+        spotId: spot.id,
+        url: previewImage,
+        preview: true,
+      });
+    }
+
+    // Fetch the spot with its associated SpotImages
+    const spotWithPreview = await Spot.findByPk(spot.id, {
+      include: {
+        model: SpotImage,
+        as: "SpotImages",
+        attributes: ["url", "preview"],
+      },
+    });
+
+    return res.status(201).json(spotWithPreview);
   } catch (error) {
     return res.status(400).json({
       message: "Bad Request",

@@ -1,8 +1,89 @@
+# JA Vacation
 # `ja_vacation`
+
+# Introduction
+
+JA Vacation is a comprehensive vacation rental platform where users can browse, book, and manage vacation rentals. It includes functionalities for both guests and property owners, enabling seamless interaction and transactions.
 
 ## Database Schema Design
 
 [db-schema]: ./images/db_design.png
+
+## Technologies Used
+
+- **Frontend**: React, Redux
+- **Backend**: Express.js, Sequelize
+- **Database**: PostgreSQL
+- **Deployment**: Render
+- **Other Tools**: Node.js, VSCode
+
+## Features
+
+- User authentication and authorization
+- Browse and search vacation rental properties
+- Manage property listings (create, read, update, delete)
+- Reviews and ratings for properties
+- Booking management for users and hosts
+
+## Setup and Launch Instructions
+
+To launch the application locally, follow these steps:
+
+### Prerequisites
+
+Ensure you have the following installed:
+- Node.js
+- PostgreSQL
+- Git
+
+### Steps
+
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd ja_vacation
+   ```
+
+2. **Setup Backend**
+   - Navigate to the `backend` directory:
+     ```bash
+     cd backend
+     ```
+   - Install dependencies:
+     ```bash
+     npm install
+     ```
+   - Create a `.env` file with the required environment variables (e.g., database connection, JWT secrets).
+   - Migrate and seed the database:
+     ```bash
+     npx sequelize db:migrate
+     npx sequelize db:seed:all
+     ```
+   - Start the backend server:
+     ```bash
+     npm start
+     ```
+
+3. **Setup Frontend**
+   - Navigate to the `frontend` directory:
+     ```bash
+     cd ../frontend
+     ```
+   - Install dependencies:
+     ```bash
+     npm install
+     ```
+   - Start the frontend server:
+     ```bash
+     npm start
+     ```
+
+4. **Access the Application**
+   - Open your browser and navigate to `http://localhost:3000`.
+
+## Showcase
+
+![Database Design](images/db_design.png)
 
 ## API Documentation
 

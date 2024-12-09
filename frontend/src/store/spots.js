@@ -34,32 +34,47 @@ export const getSpots = () => async (dispatch) => {
   const res = await csrfFetch("/api/spots");
   const list = await res.json();
 
-  dispatch(loadSpots(list.Spots));
+  // Ensure preview images are included
+  const spotsWithImages = list.Spots.map((spot) => ({
+    ...spot,
+    previewImage: spot.previewImage || null,
+  }));
+
+  dispatch(loadSpots(spotsWithImages));
 };
 
 // Thunk Action: Load Spot Details
 export const getSpotDetails = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
   const spot = await res.json();
-  dispatch(loadSpotDetails(spot));
+
+  // Include all spot images in the spot details
+  const spotWithImages = {
+    ...spot,
+    images: spot.previewImage || [],
+  };
+
+  dispatch(loadSpotDetails(spotWithImages));
 };
 
 // Thunk Action: Add A Spot
 export const createSpot = (spotData) => async (dispatch) => {
-  try {
-    const res = await csrfFetch(`/api/spots`, {
-      method: "POST",
-      body: JSON.stringify(spotData),
-    });
-    if (!res.ok) throw new Error("Failed to create spot.");
-    const newSpot = await res.json();
-    // Dispatch action to add the new spot to the Redux store
-    dispatch(addSpot(newSpot));
-    return newSpot; // Return the new spot to handle navigation or UI feedback
-  } catch (err) {
-    console.error("Error creating spot:", err);
-    throw err;
-  }
+  const res = await csrfFetch(`/api/spots`, {
+    method: "POST",
+    body: JSON.stringify(spotData),
+  });
+
+  if (!res.ok) throw new Error("Failed to create spot.");
+
+  const newSpot = await res.json();
+
+  // Extract the preview image from SpotImages
+  const previewImage = newSpot.SpotImages?.find((image) => image.preview)?.url || null;
+
+  const spotWithPreview = { ...newSpot, previewImage };
+
+  dispatch(addSpot(spotWithPreview));
+  return spotWithPreview;
 };
 
 // Thunk Action: Delete A Spot

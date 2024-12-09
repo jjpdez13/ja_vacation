@@ -148,9 +148,9 @@ function SpotFormModal({ spot = {} }) {
           <label>
             Preview Image
             <input
-              type="file"
+              type="url"
               accept="image/*"
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={(e) => setImage(e.target.value)}
               required={!spot.id}
             />
           </label>

@@ -5,6 +5,7 @@ import flash from "../../assets/images/IMG_0258.png";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import './Navigation.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button
+      <button className="profile-button"
         onClick={toggleMenu}
         style={{ background: "none", cursor: "pointer" }}
       > PROFILE

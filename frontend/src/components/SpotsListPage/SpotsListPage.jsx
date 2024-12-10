@@ -49,7 +49,8 @@ const SpotsListPage = () => {
               />
               <div className="spot-info">
                 <h2>{spot.name}</h2>
-                <p>{spot.location}</p>
+                <p>{spot.city}</p>
+                <p>{spot.state}</p>
                 <p>${spot.price} / night</p>
               </div>
             </NavLink>

@@ -1,109 +1,134 @@
 /* Navigation.css */
 
 /* General Reset for Navigation */
-ul, li {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
 a {
   text-decoration: none;
   color: inherit;
 }
 
-/* Navbar Styling */
+/* Global Line Spacing */
+body {
+  font-family: 'Airbnb Cereal', 'Helvetica Neue', sans-serif;
+  color: #333333;
+  background-color: #f7f7f7;
+  margin: 0;
+  padding: 0;
+  line-height: calc(1em + 5px); /* Adds 1px spacing between lines */
+}
+
+/* Navbar Container */
 .navbar {
-  position: relative; /* Reference for positioning child elements */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 10px 20px;
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  position: relative; /* Allows dropdown positioning within the navbar */
 }
 
+/* Logo Section */
+.navbar-logo img {
+  width: 35px;
+  height: auto;
+}
+
+/* Links Section */
 .navbar-links {
   display: flex;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 15px;
 }
 
-.navbar-links a {
-  font-size: 1rem;
+.navbar-link {
+  font-size: 16px;
   font-weight: 500;
   color: #333333;
+  text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.navbar-links a:hover {
+.navbar-link:hover {
   color: #ff385c;
 }
 
-/* Profile Button */
+/* Profile Button and Dropdown */
 .profile-button {
-  position: relative; /* Reference point for dropdown */
-  cursor: pointer;
+  position: relative;
+  z-index: 1100;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333333;
-  border: none;
+  justify-content: center;
   background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-button img {
+  width: 55px;
+  height: 55px;
 }
 
 .profile-dropdown {
-  position: absolute;
-  top: 100%; /* Aligns the dropdown directly below the button */
-  left: 0; /* Aligns dropdown with the left edge of the button */
-  background-color: #ffffff;
+  position: fixed;
+  top: 100%; /* Adjusts dropdown directly below the navbar */
+  background-color: white;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 0;
-  z-index: 1000; /* Ensures dropdown appears above other elements */
   display: none; /* Hidden by default */
-  min-width: 200px; /* Consistent size for dropdown */
+  z-index: 1000;
+  padding: 0;
+  min-width: 200px;
 }
 
 .profile-dropdown.show {
-  display: block; /* Shows dropdown when toggled */
+  display: block; /* Make dropdown visible */
 }
 
 .profile-dropdown li {
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  color: #333333;
+  list-style: none; /* Remove bullet points */
+  padding: 10px 15px; /* Add space for usability */
+  font-size: 14px;
+  color: #333;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .profile-dropdown li:hover {
   background-color: #f7f7f7;
   color: #ff385c;
 }
+
+/* Logout Button */
+.logout-button button {
+  background-color: #ff385c;
+  color: white;
+  border: none;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.logout-button button:hover {
+  background-color: #e63946;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .navbar {
-      flex-direction: column;
-      align-items: stretch; /* Ensure layout adapts for smaller screens */
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .navbar-links {
-      flex-direction: column;
-      gap: 0.5rem;
-  }
-
-  .profile-button {
-      position: static; /* Align profile button within the navbar */
-      margin-left: auto;
-      margin-top: 0.5rem;
-  }
-
-  .profile-dropdown {
-      right: auto;
-      left: 0; /* Align dropdown to the left on smaller screens */
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 0;
   }
 }

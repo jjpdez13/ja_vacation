@@ -5,7 +5,7 @@ import flash from "../../assets/images/IMG_0258.png";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
-import './Navigation.css';
+import "./Navigation.css";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -43,16 +43,16 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button className="profile-button"
+      <button
+        className="profile-button"
         onClick={toggleMenu}
         style={{ background: "none", cursor: "pointer" }}
-      > PROFILE
+      >
         <img
-          src={flash}
+          src="https://i.imgur.com/XjDUd6i.png"
           alt="Profile"
-          style={{ width: "55px", height: "73px" }}
+          style={{ width: "55px", height: "55px" }}
         />
-        BUTTON
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
@@ -62,19 +62,19 @@ function ProfileButton({ user }) {
               {user.firstName} {user.lastName}
             </li>
             <li>{user.email}</li>
-            <li>
+            <li className="logout-button">
               <button onClick={logout}>Log Out</button>
             </li>
           </>
         ) : (
           <>
-            <li>
+            <li className="login-button">
               <OpenModalButton
                 buttonText="Log In"
                 modalComponent={<LoginFormModal />}
               />
             </li>
-            <li>
+            <li className="signup-button">
               <OpenModalButton
                 buttonText="Sign Up"
                 modalComponent={<SignupFormModal />}

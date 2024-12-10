@@ -1,7 +1,9 @@
 /* TODO: Add sitewide styles */
 /* Document
  * ========================================================================== */
-
+ ul, ol {
+  list-style: none;
+}
 /**
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in
@@ -459,11 +461,10 @@ button {
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
-  padding: 12px 20px;
+  padding: 0px 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   width: auto;
-  display: inline-block; 
 }
 
 button:hover {

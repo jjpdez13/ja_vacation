@@ -48,9 +48,19 @@ const SpotsListPage = () => {
                 className="spot-image"
               />
               <div className="spot-info">
-                <h2>{spot.name}</h2>
-                <p>{spot.city}</p>
-                <p>{spot.state}</p>
+                <div className="top-spot">
+                  <p>
+                    {spot.city}, {spot.state}
+                  </p>
+                  <p className="stars">
+                    <img
+                      src="https://cdn.discordapp.com/emojis/1175836866696724580.webp?size=240"
+                      alt="star"
+                      className="star-image"
+                    ></img>
+                    {spot.avgRating ? spot.avgRating.toFixed(1) : "No Ratings"}
+                  </p>
+                </div>
                 <p>${spot.price} / night</p>
               </div>
             </NavLink>

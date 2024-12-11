@@ -67,6 +67,11 @@ router.get("/", async (req, res) => {
     where,
     limit,
     offset,
+    attributes: {
+      include: [
+        [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
+      ],
+    },
     include: [
       {
         model: SpotImage,
@@ -85,12 +90,6 @@ router.get("/", async (req, res) => {
   });
 
   const result = spots.map((spot) => {
-    const numReviews = spot.Reviews ? spot.Reviews.length : 0;
-    const avgRating =
-      numReviews > 0
-        ? spot.Reviews.reduce((sum, review) => sum + review.stars, 0) /
-          numReviews
-        : 0;
     return {
       id: spot.id,
       ownerId: spot.ownerId,
@@ -105,10 +104,7 @@ router.get("/", async (req, res) => {
       price: spot.price ? parseFloat(spot.price) : null,
       createdAt: spot.createdAt,
       updatedAt: spot.updatedAt,
-      avgRating: spot.dataValues.avgRating
-        ? parseFloat(spot.dataValues.avgRating).toFixed(1)
-        : null,
-
+      avgRating: spot.getDataValue("avgRating") || 0, 
       previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null,
     };
   });
@@ -128,7 +124,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
     where: { ownerId: userId },
     attributes: {
       include: [
-        [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgStarRating"],
+        [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
       ],
     },
     include: [
@@ -159,7 +155,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
     price: spot.price,
     createdAt: spot.createdAt,
     updatedAt: spot.updatedAt,
-    avgRating: spot.getDataValue("avgStarRating") || 0, // Default to 0 if no reviews
+    avgRating: spot.getDataValue("avgRating") || 0, // Default to 0 if no reviews
     previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null, // Get the preview image URL
   }));
 

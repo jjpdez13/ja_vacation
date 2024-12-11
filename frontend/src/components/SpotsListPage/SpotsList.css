@@ -1,87 +1,94 @@
-/* frontend/src/components/SpotsListPage/SpotsList.css */
+/* Updated SpotsList.css */
 
 .spots-list-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  /* Center the title */
+  padding: 20px;
+  background-color: #f7f7f7;
+  font-family: Arial, sans-serif;
+}
+
 .spots-list-header {
-    display: flex;
-    flex-direction: column; /* Stack title and button vertically */
-    align-items: center; /* Center-align both the title and the button */
-    margin-bottom: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-/* Add spacing between the title and the button */
-.spots-list-header h1 {
-    margin-bottom: 50px; /* Add some spacing below the title */
-    text-align: center; /* Center the text of the title */
+.spots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 20px;
 }
 
-/* Style for the button (optional, if needed) */
-.spots-list-header button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.spot-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer; /* Reflects interactivity */
 }
 
-.spots-list-header button:hover {
-    background-color: #0056b3;
+.spot-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
-  
-  .spots-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    list-style: none;
-    padding: 0;
-  }
-  
-  .spot-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .spot-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .spot-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .spot-info {
-    padding: 15px;
-    text-align: center;
-  }
-  
-  .spot-info h2 {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .spot-info p {
-    font-size: 0.9rem;
-    margin: 5px 0;
-    color: #555;
-  }
-  
-  .spot-info p:last-child {
-    font-weight: bold;
-    color: #e63946;
-  }
+
+.spot-image {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+.spot-info {
+  padding: 10px;
+}
+
+.spot-info .stars {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.spot-info p {
+  width: 60%;
+  margin: 5px 0;
+  color: #555;
+  font-size: 16px;
+}
+
+.spot-info .spot-rating {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.spot-info .star-image {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+
+.spot-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.delete-button {
+  background-color: #ff6b6b;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+  background-color: #e04848;
+}

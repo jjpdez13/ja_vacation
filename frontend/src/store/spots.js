@@ -37,6 +37,7 @@ export const getSpots = () => async (dispatch) => {
   // Ensure preview images are included
   const spotsWithImages = list.Spots.map((spot) => ({
     ...spot,
+    avgRating: spot.avgRating || 0,
     previewImage: spot.previewImage || null,
   }));
 
@@ -51,6 +52,7 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
   // Include all spot images in the spot details
   const spotWithImages = {
     ...spot,
+    avgRating: spot.avgStarRating || 0,
     images: spot.previewImage || [],
   };
 

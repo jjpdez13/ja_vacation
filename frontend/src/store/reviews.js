@@ -6,10 +6,11 @@ const REMOVE_REVIEW = "reviews/deleteReview";
 const UPDATE_REVIEW = "reviews/updateReview";
 
 // Action Creators
-const loadReviews = (spotId, reviews) => ({
+const loadReviews = (spotId, reviews, avgRating) => ({
   type: LOAD_REVIEWS,
   spotId,
   reviews,
+  avgRating,
 });
 
 const addReview = (reviewData) => ({

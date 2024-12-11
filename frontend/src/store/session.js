@@ -18,17 +18,27 @@ const removeUser = () => ({
 // Thunk Action: Log In
 export const login = (user) => async (dispatch) => {
   const { credential, password } = user;
-  const res = await csrfFetch("/api/session", {
-    method: "POST",
-    body: JSON.stringify({
-      credential,
-      password,
-    }),
-  });
+  try {
+    const res = await csrfFetch("/api/session", {
+      method: "POST",
+      body: JSON.stringify({
+        credential,
+        password,
+      }),
+    });
 
-  const data = await res.json();
-  dispatch(setUser(data.user));
-  return res;
+    if (res.ok) {
+      const data = await res.json();
+      dispatch(setUser(data.user)); // Save the logged-in user to the Redux store
+      return res; // Return the response to indicate success
+    }
+
+    const data = await res.json();
+    throw data; // Throw the errors from the response
+  } catch (err) {
+    console.error("Login error:", err);
+    throw err; // Re-throw the error so the calling function can handle it
+  }
 };
 
 // Thunk Action: Restore User

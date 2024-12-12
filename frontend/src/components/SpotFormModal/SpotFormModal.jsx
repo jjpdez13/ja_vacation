@@ -15,8 +15,6 @@ function SpotFormModal({ spot = {} }) {
   const [city, setCity] = useState(spot.city || "");
   const [state, setState] = useState(spot.state || "");
   const [country, setCountry] = useState(spot.country || "");
-  const [lat, setLat] = useState(spot.lat || "");
-  const [lng, setLng] = useState(spot.lng || "");
   const [price, setPrice] = useState(spot.price || "");
   const [description, setDescription] = useState(spot.description || "");
   const [image, setImage] = useState(null);
@@ -31,8 +29,6 @@ function SpotFormModal({ spot = {} }) {
       city,
       state,
       country,
-      lat,
-      lng,
       price,
       description,
       previewImage: image,

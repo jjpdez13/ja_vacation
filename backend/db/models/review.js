@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Review.belongsTo(models.Spot, { foreignKey: 'spotId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
       Review.belongsTo(models.User, { foreignKey: 'userId',onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-      Review.hasMany(models.ReviewImage, { foreignKey: 'reviewId' });
+      Review.hasMany(models.ReviewImage, { foreignKey: 'reviewId', onDelete: 'CASCADE', onUpdate: 'CASCADE'  });
     }
   }
   Review.init({

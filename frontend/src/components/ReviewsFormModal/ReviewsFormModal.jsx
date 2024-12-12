@@ -38,11 +38,12 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
       }
       closeModal();
     } catch (error) {
-      if (error.json) {
-        const data = await error.json();
-        if (data?.errors) setErrors(data.errors);
+      if (error.response) {
+        // Validation errors
+        const backendErrors = error.response.data.errors || {};
+        setErrors(backendErrors);
       } else {
-        console.error("Unexpected error:", error);
+        setErrors({ review: "An unexpected error occurred." });
       }
     }
   };
@@ -51,6 +52,8 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
     <>
       <h1>{review?.id ? "Edit Your Review" : "Write A Review"}</h1>
       <form onSubmit={handleSubmit} className="form-container">
+        {errors.review && <p className="error">{errors.review}</p>}
+        {errors.stars && <p className="error">{errors.stars}</p>}
         <div className="form-content">
           <label>
             Review

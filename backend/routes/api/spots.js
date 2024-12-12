@@ -14,7 +14,7 @@ const {
   Booking,
   sequelize,
 } = require("../../db/models");
-const { Op } = require("sequelize");
+const { Op, fn, col } = require("sequelize");
 const router = express.Router();
 
 // Add Query Filters to Get All Spots

@@ -25,6 +25,12 @@ const SpotsListPage = () => {
     dispatch(spotActions.getSpots());
   }, [dispatch]);
 
+  const getAvg = reviews => {
+    if (!reviews || reviews.length === 0) return "New";
+    const stars = reviews.reduce((sum, review) => sum + review.stars, 0);
+    return (stars / reviews.length).toFixed(1);
+  };
+
   const spotsArr = Object.values(spots || {});
 
   return (
@@ -52,10 +58,7 @@ const SpotsListPage = () => {
                       alt="star"
                       className="star-image"
                     ></img>
-                    {typeof spot.avgRating === "number" &&
-                    !isNaN(spot.avgRating)
-                      ? spot.avgRating.toFixed(1)
-                      : "New"}
+                   {spot.avgRating || "New"}
                   </p>
                 </div>
                 <p>${spot.price} / night</p>

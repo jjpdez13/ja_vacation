@@ -52,10 +52,7 @@ const SpotsListPage = () => {
                       alt="star"
                       className="star-image"
                     ></img>
-                    {typeof spot.avgRating === "number" &&
-                    !isNaN(spot.avgRating)
-                      ? spot.avgRating.toFixed(1)
-                      : "New"}
+                    {spot.avgRating ? spot.avgRating.toFixed(1) : "New"} 
                   </p>
                 </div>
                 <p>${spot.price} / night</p>

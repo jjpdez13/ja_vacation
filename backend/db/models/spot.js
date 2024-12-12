@@ -53,9 +53,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DECIMAL
     },
-    avgRating: {
-      type: DataTypes.DECIMAL,
-    }
   }, {
     sequelize,
     modelName: 'Spot',

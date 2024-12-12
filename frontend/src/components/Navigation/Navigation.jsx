@@ -15,8 +15,8 @@ function Navigation({ isLoaded }) {
 
         {/* Navigation Links */}
         <div className="navbar-links">
-          <NavLink to="/" className="navbar-link">| Home |</NavLink>
-          <NavLink to="/spots" className="navbar-link">| Spots |</NavLink>
+          <NavLink to="/" className="navbar-link"> Home </NavLink>
+          <NavLink to="/spots" className="navbar-link"> Spots </NavLink>
         </div>
 
         {/* Profile Button */}

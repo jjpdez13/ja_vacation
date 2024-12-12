@@ -17,6 +17,7 @@ const ReviewsList = ({ spotId, ownerId }) => {
     dispatch(reviewActions.deleteReview(reviewId))
       .then(() => {
         console.log("Review deleted: ", reviewId);
+        dispatch(reviewActions.getReviews(spotId));
       })
       .catch((err) => console.error("Failed to delete review: ", err));
   };

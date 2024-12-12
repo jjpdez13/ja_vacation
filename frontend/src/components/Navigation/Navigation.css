@@ -115,6 +115,37 @@ body {
   color: #ff385c;
 }
 
+/* User Menu */
+.user-menu-dropdown {
+  margin-top: 10px;
+  padding: 5px 0;
+  list-style: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
+  position: relative;
+}
+
+.user-menu-dropdown.show {
+  display: block;
+}
+
+.user-menu-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  text-align: left;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.user-menu-button:hover {
+  text-decoration: underline;
+}
+
 /* Logout Button */
 .logout-button button {
   background-color: #ff385c;

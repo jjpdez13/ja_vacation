@@ -31,12 +31,6 @@ const SpotsListPage = () => {
     <div className="spots-list-container">
       <header className="spots-list-header">
         <h1>All the Spots</h1>
-        {user && (
-          <OpenModalButton
-            buttonText="Create Spot"
-            modalComponent={<SpotFormModal />}
-          />
-        )}
       </header>
       <ul className="spots-grid">
         {spotsArr.map((spot) => (
@@ -58,7 +52,9 @@ const SpotsListPage = () => {
                       alt="star"
                       className="star-image"
                     ></img>
-                    {typeof spot.avgRating === "number" ? spot.avgRating.toFixed(1) : "No Ratings"}
+                    {typeof spot.avgRating === "number"
+                      ? spot.avgRating.toFixed(1)
+                      : "No Ratings"}
                   </p>
                 </div>
                 <p>${spot.price} / night</p>

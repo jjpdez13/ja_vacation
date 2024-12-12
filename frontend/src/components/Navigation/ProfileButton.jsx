@@ -4,11 +4,13 @@ import * as sessionActions from "../../store/session";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import SpotFormModal from "../SpotFormModal";
 import "./Navigation.css";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const ulRef = useRef();
 
   const toggleMenu = (e) => {
@@ -16,21 +18,29 @@ function ProfileButton({ user }) {
     setShowMenu((prev) => !prev);
   };
 
+  const toggleUserMenu = (e) => {
+    setShowUserMenu((prev) => !prev);
+  }
+
   useEffect(() => {
-    if (!showMenu) return;
+    if (!showMenu && !showUserMenu) return;
 
     const closeMenu = (e) => {
-      if (!ulRef.current.contains(e.target)) {
+      if (ulRef.current && !ulRef.current.contains(e.target)) {
         setShowMenu(false);
+        setShowUserMenu(false);
       }
     };
 
     document.addEventListener("click", closeMenu);
 
     return () => document.removeEventListener("click", closeMenu);
-  }, [showMenu]);
+  }, [showMenu, showUserMenu]);
 
-  const closeMenu = () => setShowMenu(false);
+  const closeMenu = () => {
+    setShowMenu(false);
+    setShowUserMenu(false);
+  };
 
   const logout = (e) => {
     e.preventDefault();
@@ -39,6 +49,7 @@ function ProfileButton({ user }) {
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "show" : "");
+  const userMenuClassName = "user-menu-dropdown" + (showUserMenu ? "show" : "");
 
   return (
     <>
@@ -56,13 +67,23 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>{user.username}</li>
+            <li>Hello, {user.firstName}!</li>
+            <li>email: {user.email}</li>
             <li>
-              {user.firstName} {user.lastName}
-            </li>
-            <li>{user.email}</li>
-            <li className="logout-button">
-              <button onClick={logout}>Log Out</button>
+              <button className="user-menu-button" onClick={toggleUserMenu}>
+                User Menu
+              </button>
+              <ul className={userMenuClassName}>
+                <li>
+                  <button onClick={logout}>Log Out</button>
+                </li>
+                <li>
+                  <OpenModalButton
+                    buttonText="Create Spot"
+                    modalComponent={<SpotFormModal />}
+                  />
+                </li>
+              </ul>
             </li>
           </>
         ) : (

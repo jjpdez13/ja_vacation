@@ -34,7 +34,7 @@ const SpotsListPage = () => {
       </header>
       <ul className="spots-grid">
         {spotsArr.map((spot) => (
-          <li key={spot.id} className="spot-card">
+          <li key={spot.id} className="spot-card" title={`${ spot.name }`} >
             <NavLink to={`/spots/${spot.id}`}>
               <img
                 src={spot.previewImage || "/placeholder.jpg"}

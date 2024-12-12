@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { spotActions } from "../../store";
+import { reviewActions, spotActions } from "../../store";
 import { NavLink } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
 import SpotFormModal from "../SpotFormModal";
@@ -21,12 +21,10 @@ const SpotsListPage = () => {
       .catch((err) => console.error("Failed to delete spot:", err));
   };
 
-    useEffect(() => {
-      if (spotId) {
-        dispatch(spotActions.getSpotDetails(spotId));
-        dispatch(reviewActions.getReviews(spotId));
-      }
-    }, [dispatch, spotId]);
+  useEffect(() => {
+    dispatch(spotActions.getSpots());
+    dispatch(reviewActions.getReviews());
+  }, [dispatch]);
 
   const spotsArr = Object.values(spots || {});
 

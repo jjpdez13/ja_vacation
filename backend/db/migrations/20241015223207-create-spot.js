@@ -76,9 +76,7 @@ module.exports = {
       {}
     );
     if (process.env.DATABASE_DIALECT === "postgres") {
-      await queryInterface.sequelize.query(
-        `ALTER SEQUENCE "Spots_id_seq" RESTART WITH 1;`
-      );
+      await queryInterface.sequelize.query(`ALTER SEQUENCE "${options.schema}"."Spots_id_seq" RESTART WITH 1;`)
     }
   },
   async down(queryInterface, Sequelize) {

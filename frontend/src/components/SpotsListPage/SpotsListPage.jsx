@@ -25,11 +25,11 @@ const SpotsListPage = () => {
     dispatch(spotActions.getSpots());
   }, [dispatch]);
 
-  const getAvg = reviews => {
-    if (!reviews || reviews.length === 0) return "New";
-    const stars = reviews.reduce((sum, review) => sum + review.stars, 0);
-    return (stars / reviews.length).toFixed(1);
-  };
+  // const getAvg = reviews => {
+  //   if (!reviews || reviews.length === 0) return "New";
+  //   const stars = reviews.reduce((sum, review) => sum + review.stars, 0);
+  //   return (stars / reviews.length).toFixed(1);
+  // };
 
   const spotsArr = Object.values(spots || {});
 

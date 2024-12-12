@@ -76,7 +76,9 @@ module.exports = {
       {}
     );
     if (process.env.DATABASE_DIALECT === "postgres") {
-      await queryInterface.sequelize.query(`ALTER SEQUENCE "${options.schema}"."Spots_id_seq" RESTART WITH 1;`)
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Reviews"` : "Reviews"} RESTART IDENTITY CASCADE;`
+      )
     }
   },
   async down(queryInterface, Sequelize) {

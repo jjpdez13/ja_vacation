@@ -57,7 +57,7 @@ module.exports = {
     }, options, {});
     if (process.env.DATABASE_DIALECT === 'postgres') {
       await queryInterface.sequelize.query(
-        `ALTER SEQUENCE "${options.schema}"."Reviews_id_seq" RESTART WITH 1;`
+        `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Reviews"` : "Reviews"} RESTART IDENTITY CASCADE;`
       );
     }
   },

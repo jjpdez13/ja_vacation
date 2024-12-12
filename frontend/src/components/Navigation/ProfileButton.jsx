@@ -19,6 +19,7 @@ function ProfileButton({ user }) {
   };
 
   const toggleUserMenu = (e) => {
+    e.stopPropagation();
     setShowUserMenu((prev) => !prev);
   }
 

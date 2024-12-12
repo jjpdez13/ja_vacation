@@ -3,7 +3,6 @@
 const express = require("express");
 const { requireAuth } = require("../../utils/auth");
 const {
-  handleValidationErrors,
   validateSpot,
 } = require("../../utils/validation");
 const {
@@ -69,7 +68,7 @@ router.get("/", async (req, res) => {
     offset,
     attributes: {
       include: [
-        [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
+        [fn("AVG", col("Reviews.stars")), "avgRating"],
       ],
     },
     include: [

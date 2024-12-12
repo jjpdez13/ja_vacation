@@ -1,0 +1,190 @@
+/* Main modal container */
+.spot-details-modal {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+  
+  /* Close button */
+  .close-modal {
+    background-color: #ff5a5f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    float: right;
+  }
+  
+  .close-modal:hover {
+    background-color: #e64950;
+  }
+  
+  /* Images section */
+  .spot-images {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .main-image {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .secondary-image {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  /* Spot info section */
+  .spot-info h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .spot-info p {
+    margin-bottom: 10px;
+  }
+  
+  .spot-info strong {
+    font-weight: bold;
+  }
+  
+  /* Reserve section */
+  .reserve-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+  }
+  
+  .reserve-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .price span {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .rating {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .star-image {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+  
+  .reserve-button {
+    background-color: #ff5a5f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .reserve-button:hover {
+    background-color: #e64950;
+  }
+  
+  /* Reviews section */
+  .reviews-list {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+  }
+  
+  .reviews-list h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .reviews-list p {
+    margin-bottom: 10px;
+  }
+  
+  .post-review-button {
+    display: block;
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .post-review-button:hover {
+    background-color: #45a049;
+  }
+  
+  .post-review-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .spot-details-modal {
+      padding: 15px;
+    }
+  
+    .spot-images {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+    }
+  
+    .main-image {
+      height: 300px;
+    }
+  
+    .secondary-image {
+      height: 150px;
+    }
+  
+    .reserve-section {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .reserve-button {
+      width: 100%;
+      text-align: center;
+    }
+  }

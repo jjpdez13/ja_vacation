@@ -232,15 +232,12 @@ router.get("/:spotid", async (req, res) => {
 });
 
 // Create a Spot
-// Create a Spot
 router.post("/", requireAuth, validateSpot, async (req, res) => {
   const {
     address,
     city,
     state,
     country,
-    lat,
-    lng,
     name,
     description,
     price,
@@ -255,8 +252,6 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
       city,
       state,
       country,
-      lat,
-      lng,
       name,
       description,
       price,

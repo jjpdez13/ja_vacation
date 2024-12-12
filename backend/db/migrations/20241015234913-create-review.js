@@ -62,6 +62,9 @@ module.exports = {
     }
   },
   async down(queryInterface, Sequelize) {
+    await queryInterface.sequelize.query(
+      `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Reviews"` : "Reviews"} RESTART IDENTITY CASCADE;`
+    );
     await queryInterface.dropTable("Reviews", options);
   }
 };

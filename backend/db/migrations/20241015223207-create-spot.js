@@ -77,11 +77,14 @@ module.exports = {
     );
     if (process.env.DATABASE_DIALECT === "postgres") {
       await queryInterface.sequelize.query(
-        `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Reviews"` : "Reviews"} RESTART IDENTITY CASCADE;`
+        `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Spots"` : "Spots"} RESTART IDENTITY CASCADE;`
       )
     }
   },
   async down(queryInterface, Sequelize) {
+    await queryInterface.sequelize.query(
+      `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Spots"` : "Spots"} RESTART IDENTITY CASCADE;`
+    );
     await queryInterface.dropTable("Spots", options);
   },
 };

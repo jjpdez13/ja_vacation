@@ -21,9 +21,12 @@ const SpotsListPage = () => {
       .catch((err) => console.error("Failed to delete spot:", err));
   };
 
-  useEffect(() => {
-    dispatch(spotActions.getSpots());
-  }, [dispatch]);
+    useEffect(() => {
+      if (spotId) {
+        dispatch(spotActions.getSpotDetails(spotId));
+        dispatch(reviewActions.getReviews(spotId));
+      }
+    }, [dispatch, spotId]);
 
   const spotsArr = Object.values(spots || {});
 

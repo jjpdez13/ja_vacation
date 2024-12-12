@@ -55,16 +55,26 @@ module.exports = {
         type: Sequelize.DATE
       }
     }, options, {});
-    if (process.env.DATABASE_DIALECT === 'postgres') {
+    if (process.env.NODE_ENV === "production" && process.env.DATABASE_DIALECT === "postgres") {
       await queryInterface.sequelize.query(
         `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Reviews"` : "Reviews"} RESTART IDENTITY CASCADE;`
+      );
+    } else if (process.env.NODE_ENV === "development" && process.env.DATABASE_DIALECT === "postgres") {
+      await queryInterface.sequelize.query(
+        `ALTER SEQUENCE "Reviews_id_seq" RESTART WITH 1;`
       );
     }
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Reviews"` : "Reviews"} RESTART IDENTITY CASCADE;`
-    );
+    if (process.env.NODE_ENV === "production" && process.env.DATABASE_DIALECT === "postgres") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Reviews"` : "Reviews"} RESTART IDENTITY CASCADE;`
+      );
+    } else if (process.env.NODE_ENV === "development" && process.env.DATABASE_DIALECT === "postgres") {
+      await queryInterface.sequelize.query(
+        `ALTER SEQUENCE "Reviews_id_seq" RESTART WITH 1;`
+      );
+    }
     await queryInterface.dropTable("Reviews", options);
   }
 };

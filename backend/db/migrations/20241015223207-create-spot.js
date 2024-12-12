@@ -75,16 +75,26 @@ module.exports = {
       options,
       {}
     );
-    if (process.env.DATABASE_DIALECT === "postgres") {
+    if (process.env.NODE_ENV === "production" && process.env.DATABASE_DIALECT === "postgres") {
       await queryInterface.sequelize.query(
         `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Spots"` : "Spots"} RESTART IDENTITY CASCADE;`
-      )
+      );
+    } else if (process.env.NODE_ENV === "development" && process.env.DATABASE_DIALECT === "postgres") {
+      await queryInterface.sequelize.query(
+        `ALTER SEQUENCE "Spots_id_seq" RESTART WITH 1;`
+      );
     }
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Spots"` : "Spots"} RESTART IDENTITY CASCADE;`
-    );
+    if (process.env.NODE_ENV === "production" && process.env.DATABASE_DIALECT === "postgres") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Spots"` : "Spots"} RESTART IDENTITY CASCADE;`
+      );
+    } else if (process.env.NODE_ENV === "development" && process.env.DATABASE_DIALECT === "postgres") {
+      await queryInterface.sequelize.query(
+        `ALTER SEQUENCE "Spots_id_seq" RESTART WITH 1;`
+      );
+    }
     await queryInterface.dropTable("Spots", options);
   },
 };

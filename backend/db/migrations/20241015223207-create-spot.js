@@ -75,22 +75,22 @@ module.exports = {
       options,
       {}
     );
-    if (process.env.NODE_ENV === "production" && process.env.DATABASE_DIALECT === "postgres") {
+    if (process.env.NODE_ENV === "production") {
       await queryInterface.sequelize.query(
         `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Spots"` : "Spots"} RESTART IDENTITY CASCADE;`
       );
-    } else if (process.env.NODE_ENV === "development" && process.env.DATABASE_DIALECT === "postgres") {
+    } else if (process.env.NODE_ENV === "development") {
       await queryInterface.sequelize.query(
         `ALTER SEQUENCE "Spots_id_seq" RESTART WITH 1;`
       );
     }
   },
   async down(queryInterface, Sequelize) {
-    if (process.env.NODE_ENV === "production" && process.env.DATABASE_DIALECT === "postgres") {
+    if (process.env.NODE_ENV === "production") {
       await queryInterface.sequelize.query(
         `TRUNCATE TABLE ${options.schema ? `"${options.schema}"."Spots"` : "Spots"} RESTART IDENTITY CASCADE;`
       );
-    } else if (process.env.NODE_ENV === "development" && process.env.DATABASE_DIALECT === "postgres") {
+    } else if (process.env.NODE_ENV === "development") {
       await queryInterface.sequelize.query(
         `ALTER SEQUENCE "Spots_id_seq" RESTART WITH 1;`
       );

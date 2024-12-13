@@ -14,8 +14,6 @@ function SpotDetailsModal() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const spot = useSelector((state) => state.spots.singleSpot.details);
-  const user = useSelector((state) => state.session.user);
-  const isOwner = user?.id === spot?.ownerId;
 
 
   useEffect(() => {

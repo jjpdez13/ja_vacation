@@ -37,6 +37,26 @@ module.exports = {
         preview: true,
       },
       {
+        spotId: 4, 
+        url: 'https://i.imgur.com/SF4SIk3.jpeg',
+        preview: false,
+      },
+      {
+        spotId: 4, 
+        url: 'https://i.imgur.com/TDSSSHX.jpeg',
+        preview: false,
+      },
+      {
+        spotId: 4, 
+        url: 'https://i.imgur.com/Dbl648L.jpeg',
+        preview: false,
+      },
+      {
+        spotId: 4, 
+        url: 'https://i.imgur.com/OLxusvO.jpeg',
+        preview: false,
+      },
+      {
         spotId: 3,
         url: 'https://i.imgur.com/rtFo84t.jpeg',
         preview: true, 

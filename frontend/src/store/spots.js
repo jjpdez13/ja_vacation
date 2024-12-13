@@ -29,6 +29,11 @@ const removeSpot = (spotId) => ({
   payload: spotId,
 });
 
+const getImages = (spotId) => ({
+  type: LOAD_IMAGES,
+  payload: spotId,
+})
+
 // Thunk Action: Load Spots
 export const getSpots = () => async (dispatch) => {
   const res = await csrfFetch("/api/spots");
@@ -48,12 +53,12 @@ export const getSpots = () => async (dispatch) => {
 export const getSpotDetails = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
   const spot = await res.json();
-
+  console.log("Spot details response:", spot);
   // Include all spot images in the spot details
   const spotWithImages = {
     ...spot,
     avgRating: spot.avgStarRating || 0,
-    images: spot.previewImage || [],
+    images: spot.spotImages || [],
   };
 
   dispatch(loadSpotDetails(spotWithImages));

@@ -231,7 +231,7 @@ router.get("/:spotid", async (req, res) => {
 });
 
 // Create a Spot
-router.post("/", requireAuth, validateSpot, async (req, res) => {
+router.post("/spot", requireAuth, validateSpot, async (req, res) => {
   const {
     address,
     city,

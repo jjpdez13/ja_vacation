@@ -37,7 +37,12 @@ const ReviewsList = ({ spotId, ownerId }) => {
 
   function formatReviewDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleString('default', { month: 'long', day:'numeric', year: 'numeric', hour: '2-digit' });
+    return date.toLocaleString("default", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+    });
   }
 
   return (
@@ -52,7 +57,7 @@ const ReviewsList = ({ spotId, ownerId }) => {
             <strong>
               {review.User?.firstName} {review.User?.lastName[0]}.
             </strong>
-            <p>{formatReviewDate(review.createdAt)}</p> 
+            <p>{formatReviewDate(review.createdAt)}</p>
             <p>{review.review || "No review content"}</p>
             {user?.id === review.userId && (
               <>
@@ -75,7 +80,7 @@ const ReviewsList = ({ spotId, ownerId }) => {
         <li>
           <OpenModalButton
             buttonText="Post Your Review"
-            modalComponent={<ReviewsFormModal spotId={ spotId } />}
+            modalComponent={<ReviewsFormModal spotId={spotId} />}
           />
         </li>
       )}

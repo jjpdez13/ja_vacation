@@ -29,6 +29,27 @@ body {
   position: relative; /* Allows dropdown positioning within the navbar */
 }
 
+/* Create a Spot Button */
+.navbar-create-spot {
+  position: absolute;
+  right: 50px; /* Align to the right edge */
+  top: 124px;   /* Place beneath the navbar */
+  background-color: #ff385c;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  z-index: 1050; /* Ensures it's above other elements */
+}
+
+.navbar-create-spot:hover {
+  background-color: #e63946; /* Darker hover color */
+}
+
 /* Logo Section */
 
 .navbar-logo.active {

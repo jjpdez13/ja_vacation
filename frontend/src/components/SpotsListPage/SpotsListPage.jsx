@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { spotActions } from "../../store";
 import { NavLink } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
-import SpotFormModal from "../SpotFormModal";
+import SpotFormPage from "../SpotFormPage";
 import "./SpotsList.css";
 
 const SpotsListPage = () => {
@@ -52,8 +52,7 @@ const SpotsListPage = () => {
                       alt="star"
                       className="star-image"
                     ></img>
-                    {typeof spot.avgRating === "number" ||
-                    !isNaN(Number(spot.avgRating))
+                    {typeof spot.avgRating === "number" && spot.avgRating > 0
                       ? Number(spot.avgRating).toFixed(1)
                       : "New"}
                   </p>
@@ -65,7 +64,7 @@ const SpotsListPage = () => {
               <div className="spot-actions">
                 <OpenModalButton
                   buttonText="Edit Spot"
-                  modalComponent={<SpotFormModal spot={spot} />}
+                  modalComponent={<SpotFormPage spot={spot} />}
                 />
                 <button
                   className="delete-button"

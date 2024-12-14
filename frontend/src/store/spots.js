@@ -61,7 +61,7 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
 
 // Thunk Action: Add A Spot
 export const createSpot = (spotData) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots`, {
+  const res = await csrfFetch(`/api/spots/spot`, {
     method: "POST",
     body: JSON.stringify(spotData),
   });

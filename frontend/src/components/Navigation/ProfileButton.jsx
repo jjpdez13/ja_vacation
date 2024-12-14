@@ -4,7 +4,6 @@ import * as sessionActions from "../../store/session";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
-import SpotFormModal from "../SpotFormModal";
 import "./Navigation.css";
 import { useNavigate } from "react-router-dom";
 
@@ -74,12 +73,6 @@ function ProfileButton({ user }) {
               <ul className={userMenuClassName}>
                 <li>
                   <button onClick={logout}>Log Out</button>
-                </li>
-                <li>
-                  <OpenModalButton
-                    buttonText="Create Spot"
-                    modalComponent={<SpotFormModal />}
-                  />
                 </li>
               </ul>
             </li>

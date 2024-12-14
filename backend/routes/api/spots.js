@@ -403,6 +403,7 @@ router.get("/:spotid/reviews", async (req, res) => {
         attributes: ["id", "url"],
       },
     ],
+    order: [["createdAt", "DESC"]],
   });
   // Format the response
   const formattedReviews = reviews.map((review) => ({

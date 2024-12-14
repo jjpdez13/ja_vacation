@@ -50,7 +50,7 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
 
   const StarRating = ({ rating, setRating }) => {
     const [hover, setHover] = useState(0);
-  
+
     return (
       <div className="star-rating">
         {[...Array(5)].map((_, index) => {
@@ -66,7 +66,9 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
               <img
                 src="https://cdn.discordapp.com/emojis/1175836866696724580.webp?size=240"
                 alt={`${starValue} star`}
-                className={`star ${starValue <= (hover || rating) ? "filled" : ""}`}
+                className={`star ${
+                  starValue <= (hover || rating) ? "filled" : ""
+                }`}
               />
               <div
                 className={`highlight ${
@@ -81,14 +83,14 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
   };
 
   return (
-    <>
-      <h1>{review?.id ? "Edit Your Review" : "How was your stay?"}</h1>
-      <form onSubmit={handleSubmit} className="form-container">
+    <div className="modal-container">
+      <form onSubmit={handleSubmit} className="form-container-2">
+        <h1>{review?.id ? "Edit Your Review" : "How was your stay?"}</h1>
         {errors.review && <p className="error">{errors.review}</p>}
         {errors.stars && <p className="error">{errors.stars}</p>}
+        {errors.server && <p className="error server-error">{errors.server}</p>}
         <div className="form-content">
           <label>
-            Review
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -96,8 +98,8 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
               placeholder="Leave your review here..."
             />
           </label>
-          <label>
-            <StarRating rating={rating} setRating={setRating} /><p>Stars</p>
+          <label className="stars">
+            <StarRating rating={rating} setRating={setRating} /> Stars
           </label>
         </div>
         {Object.values(errors).map((error, idx) => (
@@ -105,11 +107,14 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
             {error}
           </p>
         ))}
-        <button type="submit">
+        <button
+          type="submit"
+          disabled={content.trim().length < 10 || rating === 0}
+        >
           {review.id ? "Update Review" : "Submit Your Review"}
         </button>
       </form>
-    </>
+    </div>
   );
 }
 

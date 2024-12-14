@@ -488,6 +488,6 @@ form button,
 .modal button {
   width: auto; /* Buttons should size to their content */
   max-width: 300px; /* Optional: Add a maximum width */
-  margin: 1rem auto; /* Center buttons in forms */
+  margin: auto; /* Center buttons in forms */
   display: block;
 }

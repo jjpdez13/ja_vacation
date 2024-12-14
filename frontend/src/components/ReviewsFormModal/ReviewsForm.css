@@ -1,0 +1,176 @@
+/* Overall Form Container */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    width: 400px; /* Width matches your design */
+    max-height: 12%; /* Prevents vertical stretching beyond the viewport */
+    overflow-y: auto; /* Adds scrolling if content exceeds max height */
+    box-sizing: border-box;
+    margin: auto; /* Center modal vertically and horizontally */
+    border: 2px solid #333; /* Black border for styling */
+  }
+
+  /* Heading */
+  form h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center; /* Center the heading */
+  }
+  
+  /* Textarea Styling */
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 2px solid #333; /* Black border */
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "Arial", sans-serif;
+    box-sizing: border-box;
+    background-color: #f8f8ff; /* Light blue background */
+    resize: none; /* Disable resizing */
+  }
+  
+  textarea::placeholder {
+    color: grey; /* Light gray placeholder text */
+    font-style: italic;
+  }
+  
+  textarea:focus {
+    outline: none;
+    border-color: #555; /* Darker border on focus */
+    background-color: #ffffff;
+  }
+  
+  /* Label Styling */
+  label {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Star Rating Section */
+  .star-rating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* Spacing between stars */
+    margin: 15px 0;
+  }
+  
+  /* Display the rating value (e.g., "5 Stars") */
+  .star-rating + p {
+    margin-top: 5px;
+    font-size: 16px;
+    color: #333; /* Black text for rating label */
+    text-align: center;
+  }
+  
+  /* Submit Button Styling */
+  button[type="submit"] {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #ffffff; /* White background */
+    color: #666; /* Light gray text */
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #666; /* Light gray border */
+    border-radius: 8px;
+    cursor: not-allowed; /* Default disabled state */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  button[type="submit"]:enabled {
+    background-color: #333; /* Black background for active button */
+    color: #ffffff; /* White text */
+    border-color: #333; /* Black border */
+    cursor: pointer;
+  }
+  
+  button[type="submit"]:hover:enabled {
+    background-color: #555; /* Darker gray background on hover */
+  }
+  
+/* Star Rating Section */
+.star-rating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* Spacing between stars */
+    margin: 15px 0;
+  }
+  
+  /* Star Styling */
+  .star {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+    filter: grayscale(100%); /* Default to grayscale */
+    opacity: 0.2; /* Dim the stars to appear white */
+  }
+  
+  /* Filled Stars */
+  .star.filled {
+    filter: none; /* Remove grayscale for filled stars */
+    opacity: 1; /* Fully visible when selected */
+  }
+  
+  /* Hover Effect */
+  .star:hover {
+    transform: scale(1.1); /* Slight enlargement on hover */
+  }
+  
+  /* Highlight stars on hover */
+  .star:hover ~ .star {
+    filter: grayscale(100%);
+    opacity: 0.2; /* Dim stars after the hovered one */
+  }
+  
+  /* Highlight between hovered stars */
+  .star:hover ~ .star {
+    filter: grayscale(100%);
+  }
+  
+  /* Display the rating value (e.g., "5 Stars") */
+  .star-rating + p {
+    margin-top: 5px;
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+  }
+  
+  /* Submit Button Styling */
+  button[type="submit"] {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #ddd;
+    color: #666;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: not-allowed; /* Default disabled state */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  button[type="submit"]:enabled {
+    background-color: #333; /* Active state */
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  button[type="submit"]:hover:enabled {
+    background-color: #555; /* Darker background on hover when enabled */
+  }

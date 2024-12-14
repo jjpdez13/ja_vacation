@@ -15,7 +15,7 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
   const user = useSelector((state) => state.session.user);
   const author = `${user.firstName} ${user.lastName[0]}.`;
   const [content, setContent] = useState(review?.review || "");
-  const [rating, setRating] = useState(review?.stars || "");
+  const [rating, setRating] = useState(review?.stars || 0); // Default to 0 stars
   const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
 
@@ -37,6 +37,7 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
         await dispatch(reviewActions.createReview(spotId, reviewData));
       }
       closeModal();
+      window.location.reload();
     } catch (error) {
       if (error.response) {
         // Validation errors
@@ -48,9 +49,41 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
     }
   };
 
+  const StarRating = ({ rating, setRating }) => {
+    const [hover, setHover] = useState(0);
+  
+    return (
+      <div className="star-rating">
+        {[...Array(5)].map((_, index) => {
+          const starValue = index + 1;
+          return (
+            <div
+              key={index}
+              className="star-container"
+              onMouseEnter={() => setHover(starValue)} // Highlight stars up to hovered one
+              onMouseLeave={() => setHover(0)} // Remove highlight when not hovering
+              onClick={() => setRating(starValue)} // Set rating on click
+            >
+              <img
+                src="https://cdn.discordapp.com/emojis/1175836866696724580.webp?size=240"
+                alt={`${starValue} star`}
+                className={`star ${starValue <= (hover || rating) ? "filled" : ""}`}
+              />
+              <div
+                className={`highlight ${
+                  starValue <= hover ? "active-highlight" : ""
+                }`}
+              ></div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <>
-      <h1>{review?.id ? "Edit Your Review" : "Write A Review"}</h1>
+      <h1>{review?.id ? "Edit Your Review" : "How was your stay?"}</h1>
       <form onSubmit={handleSubmit} className="form-container">
         {errors.review && <p className="error">{errors.review}</p>}
         {errors.stars && <p className="error">{errors.stars}</p>}
@@ -61,32 +94,11 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               required
-              placeholder="Write your review here..."
+              placeholder="Leave your review here..."
             />
           </label>
           <label>
-            Rating
-            <input
-              type="number"
-              min="1"
-              max="5"
-              value={rating}
-              onChange={(e) => setRating(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Author
-            <input type="text" value={author} readOnly required />
-          </label>
-          <label>
-            Review Image
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setImage(e.target.files[0])}
-              required={!review.id}
-            />
+            <StarRating rating={rating} setRating={setRating} /><p>Stars</p>
           </label>
         </div>
         {Object.values(errors).map((error, idx) => (
@@ -95,7 +107,7 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
           </p>
         ))}
         <button type="submit">
-          {review.id ? "Update Review" : "Create Review"}
+          {review.id ? "Update Review" : "Submit Your Review"}
         </button>
       </form>
     </>

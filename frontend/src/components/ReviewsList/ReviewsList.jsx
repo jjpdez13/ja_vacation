@@ -47,6 +47,14 @@ const ReviewsList = ({ spotId, ownerId }) => {
 
   return (
     <ul className="reviews-list">
+      {user && user?.id !== ownerId && !hasReviewed && (
+        <li>
+          <OpenModalButton
+            buttonText="Post Your Review"
+            modalComponent={<ReviewsFormModal spotId={spotId} />}
+          />
+        </li>
+      )}
       {reviewsArr.length === 0 ? (
         <li>
           <p>No reviews yet. Be the first to leave one!</p>
@@ -75,14 +83,6 @@ const ReviewsList = ({ spotId, ownerId }) => {
             )}
           </li>
         ))
-      )}
-      {user && user?.id !== ownerId && !hasReviewed && (
-        <li>
-          <OpenModalButton
-            buttonText="Post Your Review"
-            modalComponent={<ReviewsFormModal spotId={spotId} />}
-          />
-        </li>
       )}
     </ul>
   );

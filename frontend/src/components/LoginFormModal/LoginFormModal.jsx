@@ -1,5 +1,3 @@
-// frontend/src/components/LoginFormModal/LoginFormModal.jsx
-
 import { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
@@ -13,13 +11,24 @@ function LoginFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
+  const resetForm = () => {
+    setCredential("");
+    setPassword("");
+    setErrors({});
+  };
+
+  const handleClose = () => {
+    resetForm();
+    closeModal();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({}); // Clear existing errors
+    setErrors({});
 
     try {
       await dispatch(sessionActions.login({ credential, password }));
-      closeModal();
+      handleClose();
     } catch (data) {
       if (data?.message) {
         setErrors({ credential: data.message });
@@ -37,7 +46,7 @@ function LoginFormModal() {
           password: "PeaceLove&Chicken1324***",
         })
       );
-      closeModal();
+      handleClose();
     } catch (res) {
       const data = await res.json();
       if (data?.errors) setErrors(data.errors);
@@ -48,7 +57,7 @@ function LoginFormModal() {
     <>
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
-      {errors.credential && <p>{errors.credential}</p>}
+        {errors.credential && <p>{errors.credential}</p>}
         <label>
           Username or Email
           <input
@@ -67,7 +76,9 @@ function LoginFormModal() {
             required
           />
         </label>
-        <button type="submit" disabled={credential.length < 4 || password.length < 6}>Log In</button>
+        <button type="submit" disabled={credential.length < 4 || password.length < 6}>
+          Log In
+        </button>
       </form>
       <button onClick={handleDemoLogin} className="demo-user-button">
         Log in as Demo User

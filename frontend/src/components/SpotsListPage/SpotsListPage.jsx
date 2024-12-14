@@ -53,7 +53,7 @@ const SpotsListPage = () => {
                       alt="star"
                       className="star-image"
                     ></img>
-                    {Number(spot.avgRating) ? spot.avgRating.toFixed(1) : "New"}
+                    {typeof Number(spot.avgRating) === "Number" ? spot.avgRating.toFixed(1) : "New"}
                   </p>
                 </div>
                 <p>${spot.price} / night</p>

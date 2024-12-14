@@ -35,7 +35,7 @@ const SpotsListPage = () => {
       </header>
       <ul className="spots-grid">
         {spotsArr.map((spot) => (
-          <li key={spot.id} className="spot-card" title={`${ spot.name }`} >
+          <li key={spot.id} className="spot-card" title={`${spot.name}`}>
             <NavLink to={`/spots/${spot.id}`}>
               <img
                 src={spot.previewImage || "/placeholder.jpg"}
@@ -53,7 +53,10 @@ const SpotsListPage = () => {
                       alt="star"
                       className="star-image"
                     ></img>
-                    {typeof spot.avgRating === "number" ? Number(spot.avgRating).toFixed(1) : "New"}
+                    {typeof spot.avgRating === "number" ||
+                    !isNaN(Number(spot.avgRating))
+                      ? Number(spot.avgRating).toFixed(1)
+                      : "New"}
                   </p>
                 </div>
                 <p>${spot.price} / night</p>

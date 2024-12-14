@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { sessionActions } from "./store";
 import {
   Navigation,
-  SpotDetailsModal,
+  SpotDetailsPage,
   SpotsListPage,
   ReviewsList,
   SpotFormPage
@@ -42,7 +42,7 @@ const router = createBrowserRouter(
         <Route path="/" element={<SpotsListPage />} />
         <Route path="/spots" element={<SpotsListPage />} />
         <Route path="/spots/spot" element={<SpotFormPage />} />
-        <Route path="/spots/:spotId" element={<SpotDetailsModal />}>
+        <Route path="/spots/:spotId" element={<SpotDetailsPage />}>
           <Route path="" element={<ReviewsList />} />
         </Route>
       </Route>

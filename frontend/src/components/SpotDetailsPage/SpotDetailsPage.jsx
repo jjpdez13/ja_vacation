@@ -1,4 +1,4 @@
-// frontend/src/components/SpotDetailsModal/SpotDetailsModal.jsx
+// frontend/src/components/SpotDetailsPage/SpotDetailsPage.jsx
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +8,7 @@ import { spotActions } from "../../store";
 import ReviewsList from "../ReviewsList";
 import "./SpotDetails.css";
 
-function SpotDetailsModal() {
+function SpotDetailsPage() {
   const { closeModal } = useModal();
   const { spotId } = useParams();
   console.log("Spot ID from URL:", spotId); 
@@ -38,7 +38,7 @@ function SpotDetailsModal() {
   };
 
   return (
-    <div className="spot-details-modal">
+    <div className="spot-details-page">
       <button className="close-modal" onClick={handleClose}>
         Close Details
       </button>
@@ -109,4 +109,4 @@ function SpotDetailsModal() {
   );
 }
 
-export default SpotDetailsModal;
+export default SpotDetailsPage;

@@ -40,11 +40,6 @@ function ProfileButton({ user }) {
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu, showUserMenu]);
 
-  const closeMenu = () => {
-    setShowMenu(false);
-    setShowUserMenu(false);
-  };
-
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());

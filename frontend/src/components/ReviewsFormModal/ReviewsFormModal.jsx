@@ -13,10 +13,9 @@ function ReviewsFormModal({ review = {}, spotId: propSpotId }) {
   const { spotId: paramSpotId } = useParams();
   const spotId = propSpotId || paramSpotId;
   const user = useSelector((state) => state.session.user);
-  const author = `${user.firstName} ${user.lastName[0]}.`;
   const [content, setContent] = useState(review?.review || "");
   const [rating, setRating] = useState(review?.stars || 0); // Default to 0 stars
-  const [image, setImage] = useState(null);
+  const [image] = useState(null);
   const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {

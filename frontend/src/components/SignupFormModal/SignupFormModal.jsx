@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import "./SignupForm.css";
@@ -36,17 +36,17 @@ function SignupFormModal() {
     return email.includes("@") && email.includes(".") && email.indexOf("@") < email.lastIndexOf(".");
   };
 
-  const isFormValid = () => {
+  const isFormValid = useCallback(() => {
     return (
       username.length >= 4 &&
       firstName.length > 0 &&
       lastName.length > 0 &&
       email.length > 0 &&
-      isEmailValid(email) && // Email format validation
+      isEmailValid(email) &&
       password.length >= 6 &&
-      (confirmPassword === password)
+      confirmPassword.length > 0
     );
-  };
+  }, [username, firstName, lastName, email, password, confirmPassword]);
 
   useEffect(() => {
     const newErrors = {};
@@ -64,7 +64,7 @@ function SignupFormModal() {
     }
     setErrors(newErrors);
     setIsButtonDisabled(!isFormValid());
-  }, [username, email, password, firstName, lastName, confirmPassword]);
+  }, [username, email, password, firstName, lastName, confirmPassword, isFormValid]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -12,6 +12,7 @@ const ReviewsList = ({ spotId, ownerId }) => {
   const reviews = useSelector((state) => state.reviews.allReviews[spotId]);
   const user = useSelector((state) => state.session.user);
   const reviewsArr = Object.values(reviews || {});
+  const hasReviewed = reviewsArr.some((review) => review.userId === user?.id);
 
   const handleDelete = (reviewId) => {
     dispatch(reviewActions.deleteReview(reviewId))
@@ -70,7 +71,7 @@ const ReviewsList = ({ spotId, ownerId }) => {
           </li>
         ))
       )}
-      {user?.id !== ownerId && (
+      {user && user?.id !== ownerId && !hasReviewed && (
         <li>
           <OpenModalButton
             buttonText="Post Your Review"

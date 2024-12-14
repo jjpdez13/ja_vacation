@@ -4,22 +4,23 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useModal } from "../../context/Modal";
-import { reviewActions, spotActions } from "../../store";
+import { spotActions } from "../../store";
 import ReviewsList from "../ReviewsList";
 import "./SpotDetails.css";
 
 function SpotDetailsModal() {
   const { closeModal } = useModal();
   const { spotId } = useParams();
+  console.log("Spot ID from URL:", spotId); 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const spot = useSelector((state) => state.spots.singleSpot.details);
 
-
   useEffect(() => {
     if (spotId) {
+      console.log("About to dispatch getSpotDetails with spotId:", spotId);
       dispatch(spotActions.getSpotDetails(spotId));
-      dispatch(reviewActions.getReviews(spotId));
+      console.log("Dispatched getSpotDetails");
     }
   }, [dispatch, spotId]);
 
@@ -78,7 +79,12 @@ function SpotDetailsModal() {
                 ${spot.price} <span>/ night</span>
               </p>
               <p className="rating">
-                ★ {spot.avgRating ? spot.avgRating.toFixed(1) : "New"} •{" "}
+                <img
+                  src="https://cdn.discordapp.com/emojis/1175836866696724580.webp?size=240"
+                  alt="star"
+                  className="star-image"
+                ></img>
+                {spot.avgRating ? spot.avgRating.toFixed(1) : "New"} •{" "}
                 {spot.numReviews || 0} reviews
               </p>
             </div>
@@ -89,6 +95,15 @@ function SpotDetailsModal() {
         </div>
       </div>
       <h2>Reviews</h2>
+      <p className="rating">
+        <img
+          src="https://cdn.discordapp.com/emojis/1175836866696724580.webp?size=240"
+          alt="star"
+          className="star-image"
+        ></img>
+        {spot.avgRating ? spot.avgRating.toFixed(1) : "New"} •{" "}
+        {spot.numReviews || 0} reviews
+      </p>
       <ReviewsList spotId={spotId} ownerId={spot?.ownerId} />
     </div>
   );

@@ -30,14 +30,18 @@ const reviseReview = (review) => ({
 
 // Thunk Action: Load Reviews
 export const getReviews = (spotId) => async (dispatch) => {
+  console.log("getReviews called with spotId:", spotId); // Debug log
+  if (!spotId) {
+    console.error("getReviews called with an undefined spotId!");
+    return;
+  }
   try {
     const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
     if (!res.ok) throw new Error("Failed to fetch reviews.");
-    const list = await res.json();
-    dispatch(loadReviews(spotId, list));
+    const reviews = await res.json();
+    dispatch(loadReviews(spotId, reviews));
   } catch (err) {
     console.error("Error loading reviews:", err);
-    throw err;
   }
 };
 

@@ -29,10 +29,15 @@ const ReviewsList = ({ spotId, ownerId }) => {
     }
   }, [dispatch, spotId]);
 
-  if (!spotId) {
-    console.log("No spotId provided. Not rendering ReviewsList.");
+  if (!spotId || isNaN(Number(spotId))) {
+    console.error("Invalid spotId provided:", spotId);
     return null;
   }
+
+  // function formatReviewDate(dateString) {
+  //   const date = new Date(dateString);
+  //   return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+  // }
 
   return (
     <ul className="reviews-list">
@@ -43,11 +48,10 @@ const ReviewsList = ({ spotId, ownerId }) => {
       ) : (
         reviewsArr.map((review) => (
           <li key={`${review.id}-${spotId}`}>
-            <p>Review: {review.review || "No review content"}</p>
-            <p>Rating: {review.stars || "No rating"}</p>
-            <p>
-              By: {review.User?.firstName} {review.User?.lastName[0]}.
-            </p>
+            <strong>
+              {review.User?.firstName} {review.User?.lastName[0]}.
+            </strong>
+            <p>{review.review || "No review content"}</p>
             {user?.id === review.userId && (
               <>
                 <OpenModalButton
@@ -68,7 +72,7 @@ const ReviewsList = ({ spotId, ownerId }) => {
       {reviewsArr.length === 0 && user?.id !== ownerId && (
         <li>
           <OpenModalButton
-            buttonText="Create A Review"
+            buttonText="Post Your Review"
             modalComponent={<ReviewsFormModal spotId={ spotId } />}
           />
         </li>

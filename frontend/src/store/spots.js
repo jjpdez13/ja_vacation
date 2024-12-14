@@ -127,6 +127,7 @@ const spotsReducer = (state = initialState, action) => {
     }
     case LOAD_SPOT_DETAILS: {
       const { ...spotDetails } = action.payload;
+      console.log("Reducer received spotDetails:", spotDetails);
       return {
         ...state,
         singleSpot: {

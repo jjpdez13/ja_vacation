@@ -1,90 +1,77 @@
-/* Main container for reviews list */
+/* Styling the reviews section */
 .reviews-list {
-    list-style: none;
+    margin: 20px 0;
+    list-style-type: none;
     padding: 0;
-    margin: 20px 0;
-    border-top: 1px solid #ddd;
-    font-family: Arial, sans-serif;
   }
   
-  /* No reviews message */
-  .reviews-list li:first-child p {
-    font-size: 1.2rem;
-    color: #777;
-    text-align: center;
-    margin: 20px 0;
-  }
-  
-  /* Individual review item */
   .reviews-list li {
     margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    border: 1px solid #ddd; /* Light border to separate each review */
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Light background */
   }
   
-  .reviews-list li:last-child {
-    border-bottom: none; /* Remove border for the last review */
+  .reviews-list li strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 5px;
   }
   
-  /* Review content */
   .reviews-list li p {
     margin: 5px 0;
-    font-size: 1rem;
-    color: #333;
-    line-height: 1.6;
-  }
-  
-  .reviews-list li p:first-of-type {
-    font-weight: bold; /* Highlight the user's first name */
-    font-size: 1.2rem; /* Slightly larger font size */
-  }
-  
-  .reviews-list li p:nth-of-type(2) {
+    color: #555;
     font-size: 0.9rem;
-    color: #555; /* Light gray for date */
-    margin-top: -5px; /* Adjust spacing below the name */
   }
   
-  .reviews-list li p:nth-of-type(3) {
-    font-size: 1rem;
-    color: #333;
-    margin-top: 10px; /* Add spacing before the comment text */
-  }
-  
-  /* Buttons */
-  .reviews-list .delete-button {
-    background-color: #ff5a5f;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    display: inline-block;
-  }
-  
-  .reviews-list .delete-button:hover {
-    background-color: #e64950;
-  }
-  
-  .reviews-list .edit-button {
-    margin-right: 10px;
-  }
-  
-  .reviews-list .create-review-button {
+  /* Specific styling for the "Post Your Review" button */
+  .reviews-list .post-review-button {
     display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #4caf50;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #333; /* Dark button background */
     color: #fff;
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
+    font-size: 0.9rem;
     text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
   }
   
-  .reviews-list .create-review-button:hover {
-    background-color: #45a049;
+  .reviews-list .post-review-button:hover {
+    background-color: #555; /* Slightly lighter color on hover */
+  }
+  
+  /* Styling for the stars and review count */
+  .reviews-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .reviews-header span {
+    margin-right: 10px; /* Space between the icon and text */
+  }
+  
+  /* Media Query for Responsiveness */
+  @media (max-width: 768px) {
+    .reviews-list li {
+      font-size: 0.8rem;
+      padding: 10px;
+    }
+  
+    .reviews-header {
+      font-size: 1rem;
+    }
+  
+    .reviews-list .post-review-button {
+      font-size: 0.8rem;
+      padding: 8px 12px;
+    }
   }

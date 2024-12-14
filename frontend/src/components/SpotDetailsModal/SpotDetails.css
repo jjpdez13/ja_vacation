@@ -27,6 +27,11 @@
   color: #555;
 }
 
+.star-image {
+  width: 23px;
+  height: 23px;
+}
+
 /* Images section */
 .spot-images {
   display: flex;

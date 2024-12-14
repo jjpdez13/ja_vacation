@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { reviewActions, spotActions } from "../../store";
+import { spotActions } from "../../store";
 import { NavLink } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
 import SpotFormModal from "../SpotFormModal";
@@ -23,7 +23,6 @@ const SpotsListPage = () => {
 
   useEffect(() => {
     dispatch(spotActions.getSpots());
-    dispatch(reviewActions.getReviews());
   }, [dispatch]);
 
   const spotsArr = Object.values(spots || {});

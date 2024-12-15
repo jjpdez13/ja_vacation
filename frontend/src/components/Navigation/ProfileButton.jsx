@@ -22,7 +22,7 @@ function ProfileButton({ user }) {
   const toggleUserMenu = (e) => {
     e.stopPropagation();
     setShowUserMenu((prev) => !prev);
-  }
+  };
 
   useEffect(() => {
     if (!showMenu && !showUserMenu) return;
@@ -43,6 +43,10 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     navigate("/");
+  };
+
+  const handleManageSpots = () => {
+    navigate("/manage-spots");
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "show" : "");
@@ -71,6 +75,9 @@ function ProfileButton({ user }) {
                 User Menu
               </button>
               <ul className={userMenuClassName}>
+                <li>
+                  <button onClick={handleManageSpots}>Manage Spots</button>
+                </li>
                 <li>
                   <button onClick={logout}>Log Out</button>
                 </li>

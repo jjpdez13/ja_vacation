@@ -7,4 +7,5 @@ export { default as SpotsListPage } from './SpotsListPage';
 export { default as SpotDetailsPage } from './SpotDetailsPage';
 export { default as ReviewsList } from './ReviewsList';
 export { default as ReviewsFormModal } from './ReviewsFormModal';
+export { default as ManageSpotsPage } from './ManageSpotsPage';
 export * from './Navigation';

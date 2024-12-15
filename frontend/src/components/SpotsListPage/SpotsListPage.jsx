@@ -60,20 +60,6 @@ const SpotsListPage = () => {
                 <p>${spot.price} / night</p>
               </div>
             </NavLink>
-            {user?.id === spot.ownerId && (
-              <div className="spot-actions">
-                <OpenModalButton
-                  buttonText="Edit Spot"
-                  modalComponent={<SpotFormPage spot={spot} />}
-                />
-                <button
-                  className="delete-button"
-                  onClick={() => handleDelete(spot.id)}
-                >
-                  Delete Spot
-                </button>
-              </div>
-            )}
           </li>
         ))}
       </ul>

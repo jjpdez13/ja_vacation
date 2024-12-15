@@ -107,6 +107,24 @@ export const updateSpot = (spotData) => async (dispatch) => {
   return updatedSpot;
 };
 
+// Thunk Action: Get User Spots
+export const getCurrentUserSpots = () => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/current`);
+
+  if (res.ok) {
+    const spots = await res.json();
+    console.log("Fetched user spots: ", spots);
+    const spotsWithImages = spots.Spots.map((spot) => ({
+      ...spot,
+      avgRating: spot.avgRating || 0,
+      previewImage: spot.previewImage || null,
+    }));
+    dispatch(loadSpots(spotsWithImages));
+  } else {
+    throw new Error("Failed to fetch user's spots");
+  }
+};
+
 // Initial State
 const initialState = {
   allSpots: {},

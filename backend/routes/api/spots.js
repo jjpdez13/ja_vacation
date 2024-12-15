@@ -138,6 +138,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
         required: false,
       },
     ],
+    group: ["Spot.id", "SpotImages.id"],
   });
   // Format the response
   const formattedSpots = spots.map((spot) => ({
@@ -157,7 +158,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
     avgRating: spot.getDataValue("avgRating") || 0, // Default to 0 if no reviews
     previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null, // Get the preview image URL
   }));
-
+  console.log("Formatted Spots: ", formattedSpots);
   return res.json({
     Spots: formattedSpots,
   });

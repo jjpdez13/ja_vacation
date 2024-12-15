@@ -4,22 +4,11 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { spotActions } from "../../store";
 import { NavLink } from "react-router-dom";
-import OpenModalButton from "../OpenModalButton";
-import SpotFormPage from "../SpotFormPage";
 import "./SpotsList.css";
 
 const SpotsListPage = () => {
   const dispatch = useDispatch();
   const spots = useSelector((state) => state.spots.allSpots);
-  const user = useSelector((state) => state.session.user);
-
-  const handleDelete = (spotId) => {
-    dispatch(spotActions.deleteSpot(spotId))
-      .then(() => {
-        console.log("Spot deleted:", spotId);
-      })
-      .catch((err) => console.error("Failed to delete spot:", err));
-  };
 
   useEffect(() => {
     dispatch(spotActions.getSpots());

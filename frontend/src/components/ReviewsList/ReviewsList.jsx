@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { reviewActions } from "../../store";
 import OpenModalButton from "../OpenModalButton";
 import ReviewsFormModal from "../ReviewsFormModal";
+import ConfirmationModal from "../ConfirmationModal";
 import "./ReviewsList.css";
 
 const ReviewsList = ({ spotId, ownerId }) => {
@@ -73,12 +74,24 @@ const ReviewsList = ({ spotId, ownerId }) => {
                   buttonText="Edit Review"
                   modalComponent={<ReviewsFormModal review={review} />}
                 />
-                <button
-                  className="delete-button"
-                  onClick={() => handleDelete(review.id)}
-                >
-                  Delete Review
-                </button>
+                <OpenModalButton
+                  buttonText="Delete Review"
+                  buttonClassName="delete-button"
+                  modalComponent={
+                    <ConfirmationModal
+                      title="Confirm Delete Review"
+                      message="Are you sure you want to delete this review?"
+                      onConfirm={(closeModal) => {
+                        handleDelete(review.id);
+                        closeModal();
+                      }}
+                      onCancel={(closeModal) => {
+                        console.log("Review delete canceled");
+                        closeModal();
+                      }}
+                    />
+                  }
+                />
               </>
             )}
           </li>

@@ -11,7 +11,6 @@ function UpdateSpotFormPage() {
   const navigate = useNavigate();
   const { spotId } = useParams();
   console.log("spotId from useParams:", spotId);
-  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -27,7 +26,6 @@ function UpdateSpotFormPage() {
   useEffect(() => {
     if (spotId) {
       dispatch(spotActions.getSpotDetails(spotId));
-      setIsLoading(true);
     }
   }, [dispatch, spotId]);
 

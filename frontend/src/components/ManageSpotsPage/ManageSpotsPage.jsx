@@ -1,16 +1,18 @@
 // frontend/src/components/ManageSpotsPage/ManageSpotsPage.jsx
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { spotActions } from "../../store";
 import { NavLink, useNavigate } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
 import ConfirmationModal from "../ConfirmationModal";
+import { useModal } from "../../context/Modal";
 import "./ManageSpots.css";
 
 const ManageSpots = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { closeModal } = useModal();
   const spots = useSelector((state) => state.spots.allSpots);
   const user = useSelector((state) => state.session.user);
 
@@ -77,19 +79,22 @@ const ManageSpots = () => {
                   buttonClassName="delete-button"
                   modalComponent={
                     <ConfirmationModal
-                      title="Confirm Delete"
+                      title="Confirm Delete Spot"
                       message="Are you sure you want to remove this spot?"
                       onConfirm={() => {
                         dispatch(spotActions.deleteSpot(spot.id))
                           .then(() => {
                             closeModal();
-                            console.log("Spot deleted:", spot.id)
+                            console.log("Spot deleted:", spot.id);
                           })
                           .catch((err) =>
                             console.error("Failed to delete spot:", err)
                           );
                       }}
-                      onCancel={() => console.log("Delete canceled")}
+                      onCancel={() => {
+                        console.log("Delete canceled");
+                        closeModal();
+                      }}
                     />
                   }
                 />

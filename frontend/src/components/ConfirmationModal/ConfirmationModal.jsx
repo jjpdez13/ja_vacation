@@ -15,13 +15,13 @@ const ConfirmationModal = ({ title, message, onConfirm, onCancel }) => {
             className="red-button"
             onClick={() => onConfirm(closeModal())}
           >
-            Yes (Delete Spot)
+            Yes (Confirm delete)
           </button>
           <button
             className="dark-grey-button"
             onClick={() => onCancel(closeModal())}
           >
-            No (Keep Spot)
+            No (do not delete)
           </button>
         </div>
       </div>

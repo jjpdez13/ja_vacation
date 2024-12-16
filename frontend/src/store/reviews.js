@@ -10,7 +10,7 @@ const loadReviews = (spotId, reviews, avgRating) => ({
   type: LOAD_REVIEWS,
   spotId,
   reviews,
-  avgRating,
+  avgRating: Number(avgRating),
 });
 
 const addReview = (reviewData) => ({

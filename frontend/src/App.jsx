@@ -14,7 +14,8 @@ import {
   SpotDetailsPage,
   SpotsListPage,
   ReviewsList,
-  SpotFormPage,
+  CreateSpotFormPage,
+  UpdateSpotFormPage,
   ManageSpotsPage
 } from "./components";
 
@@ -42,11 +43,12 @@ const router = createBrowserRouter(
       <Route element={<Layout />}>
         <Route path="/" element={<SpotsListPage />} />
         <Route path="/spots" element={<SpotsListPage />} />
-        <Route path="/spots/spot" element={<SpotFormPage />} />
+        <Route path="/spots/spot" element={<CreateSpotFormPage />} />
         <Route path="/spots/:spotId" element={<SpotDetailsPage />}>
           <Route path="" element={<ReviewsList />} />
         </Route>
         <Route path="/manage-spots" element={<ManageSpotsPage />} />
+        <Route path="/spots/:spotId/edit" element={<UpdateSpotFormPage /> } />
       </Route>
     </>
   )

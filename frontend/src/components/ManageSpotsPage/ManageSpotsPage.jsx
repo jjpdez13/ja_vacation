@@ -4,8 +4,6 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { spotActions } from "../../store";
 import { NavLink, useNavigate } from "react-router-dom";
-import OpenModalButton from "../OpenModalButton";
-import SpotFormPage from "../SpotFormPage";
 import "./ManageSpots.css";
 
 const ManageSpots = () => {
@@ -22,10 +20,8 @@ const ManageSpots = () => {
   useEffect(() => {
     if (user) {
       dispatch(spotActions.getCurrentUserSpots());
-    } else {
-      navigate("/login"); // Redirect to login if user is not logged in
     }
-  }, [dispatch, user, navigate]);
+  }, [dispatch, user]);
 
   return (
     <div className="spots-list-container">
@@ -66,10 +62,7 @@ const ManageSpots = () => {
                 </div>
               </NavLink>
               <div className="spot-actions">
-                <OpenModalButton
-                  buttonText="Update"
-                  modalComponent={<SpotFormPage spot={spot} />}
-                />
+                <button onClick={(e) => { e.stopPropagation();  navigate(`/spots/${spot.id}/edit`)}}>Update</button>
                 <button
                   className="delete-button"
                   onClick={(e) => {

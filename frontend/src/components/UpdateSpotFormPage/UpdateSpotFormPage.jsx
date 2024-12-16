@@ -1,27 +1,55 @@
-// frontend/src/components/SpotFormPage/SpotFormPage.jsx
+// frontend/src/components/UpdateSpotFormPage/UpdateSpotFormPage.jsx
 
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { spotActions } from "../../store";
-import "./SpotForm.css";
-import { useNavigate } from "react-router-dom";
+import "./UpdateSpotForm.css";
+import { useNavigate, useParams } from "react-router-dom";
 
-function SpotFormPage({ spot = {} }) {
+function UpdateSpotFormPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [name, setName] = useState(spot.name || "");
-  const [address, setAddress] = useState(spot.address || "");
-  const [city, setCity] = useState(spot.city || "");
-  const [state, setState] = useState(spot.state || "");
-  const [country, setCountry] = useState(spot.country || "");
-  const [price, setPrice] = useState(spot.price || "");
-  const [description, setDescription] = useState(spot.description || "");
+  const { spotId } = useParams();
+  console.log("spotId from useParams:", spotId);
+  const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
   const [images, setImages] = useState(["", "", "", "", ""]);
   const [errors, setErrors] = useState({});
 
-   // Check if any field is filled
-   const isAnyFieldFilled = () => {
+  const spot = useSelector((state) => state.spots.singleSpot.details);
+
+  useEffect(() => {
+    if (spotId) {
+      dispatch(spotActions.getSpotDetails(spotId));
+      setIsLoading(true);
+    }
+  }, [dispatch, spotId]);
+
+  useEffect(() => {
+    if (spot) {
+      setName(spot.name || "");
+      setAddress(spot.address || "");
+      setCity(spot.city || "");
+      setState(spot.state || "");
+      setCountry(spot.country || "");
+      setPrice(spot.price || "");
+      setDescription(spot.description || "");
+      setImages(
+        spot.spotImages?.map((img) => {
+          img.url;
+        }) || ["", "", "", "", ""]
+      );
+    }
+  }, [spot]);
+
+  // Check if any field is filled
+  const isAnyFieldFilled = () => {
     return (
       name.trim() ||
       address.trim() ||
@@ -32,22 +60,23 @@ function SpotFormPage({ spot = {} }) {
       description.trim() ||
       images.some((img) => img.trim())
     );
-   };
-  
+  };
+
   const validateAllFields = () => {
     const newErrors = {};
-  
+
     // General validations
     if (!name) newErrors.name = "Name is required.";
     if (!country) newErrors.country = "Country is required.";
     if (!address) newErrors.address = "Street address is required.";
     if (!city) newErrors.city = "City is required.";
     if (!state) newErrors.state = "State is required.";
-    if (!price || price <= 0) newErrors.price = "Price is required and must be greater than 0.";
+    if (!price || price <= 0)
+      newErrors.price = "Price is required and must be greater than 0.";
     if (!description || description.length < 30) {
       newErrors.description = "Description needs a minimum of 30 characters.";
     }
-  
+
     // Validate Preview Image URL (Required)
     if (!images[0]) {
       newErrors.previewImage = "Preview image is required.";
@@ -56,16 +85,23 @@ function SpotFormPage({ spot = {} }) {
       !images[0].endsWith(".jpeg") &&
       !images[0].endsWith(".png")
     ) {
-      newErrors.previewImage = "Preview image must end in .png, .jpg, or .jpeg.";
+      newErrors.previewImage =
+        "Preview image must end in .png, .jpg, or .jpeg.";
     }
-  
+
     // Validate Optional Additional Images
     images.slice(1).forEach((url, index) => {
-      if (url && !url.endsWith(".jpg") && !url.endsWith(".jpeg") && !url.endsWith(".png")) {
-        newErrors[`image${index + 1}`] = "Image URL must end in .png, .jpg, or .jpeg.";
+      if (
+        url &&
+        !url.endsWith(".jpg") &&
+        !url.endsWith(".jpeg") &&
+        !url.endsWith(".png")
+      ) {
+        newErrors[`image${index + 1}`] =
+          "Image URL must end in .png, .jpg, or .jpeg.";
       }
     });
-  
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };
@@ -75,6 +111,7 @@ function SpotFormPage({ spot = {} }) {
     if (!validateAllFields()) return;
 
     const spotData = {
+      id: spotId,
       name,
       address,
       city,
@@ -87,13 +124,9 @@ function SpotFormPage({ spot = {} }) {
     };
 
     try {
-      if (spot.id) {
-        await dispatch(spotActions.updateSpot({ ...spotData, id: spot.id }));
-      } else {
-        const createdSpot = await dispatch(spotActions.createSpot(spotData));
-        if (createdSpot) {
-          navigate(`/spots/${createdSpot.id}`);
-        }
+      const updatedSpot = await dispatch(spotActions.updateSpot(spotData));
+      if (updatedSpot) {
+        navigate(`/spots/${updatedSpot.id}`);
       }
     } catch (res) {
       const data = await res.json();
@@ -103,7 +136,7 @@ function SpotFormPage({ spot = {} }) {
 
   return (
     <>
-      <h1>{spot.id ? "Edit Spot" : "Create a new Spot"}</h1>
+      <h1>Edit Spot</h1>
       <form onSubmit={handleSubmit} className="form-container">
         {/* Location Section */}
         <section>
@@ -253,10 +286,12 @@ function SpotFormPage({ spot = {} }) {
             </label>
           ))}
         </section>
-        <button type="submit" disabled={!isAnyFieldFilled()}>Create Spot</button>
+        <button type="submit" disabled={!isAnyFieldFilled()}>
+          Update Spot
+        </button>
       </form>
     </>
   );
 }
 
-export default SpotFormPage;
+export default UpdateSpotFormPage;

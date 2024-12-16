@@ -16,7 +16,7 @@ import {
   ReviewsList,
   CreateSpotFormPage,
   UpdateSpotFormPage,
-  ManageSpotsPage
+  ManageSpotsPage,
 } from "./components";
 
 function Layout() {

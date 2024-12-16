@@ -1,9 +1,11 @@
 // frontend/src/components/ManageSpotsPage/ManageSpotsPage.jsx
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { spotActions } from "../../store";
 import { NavLink, useNavigate } from "react-router-dom";
+import OpenModalButton from "../OpenModalButton";
+import ConfirmationModal from "../ConfirmationModal";
 import "./ManageSpots.css";
 
 const ManageSpots = () => {
@@ -62,20 +64,35 @@ const ManageSpots = () => {
                 </div>
               </NavLink>
               <div className="spot-actions">
-                <button onClick={(e) => { e.stopPropagation();  navigate(`/spots/${spot.id}/edit`)}}>Update</button>
                 <button
-                  className="delete-button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    dispatch(spotActions.deleteSpot(spot.id))
-                      .then(() => console.log("Spot deleted:", spot.id))
-                      .catch((err) =>
-                        console.error("Failed to delete spot:", err)
-                      );
+                    navigate(`/spots/${spot.id}/edit`);
                   }}
                 >
-                  Delete
+                  Update
                 </button>
+                <OpenModalButton
+                  buttonText="Delete"
+                  buttonClassName="delete-button"
+                  modalComponent={
+                    <ConfirmationModal
+                      title="Confirm Delete"
+                      message="Are you sure you want to remove this spot?"
+                      onConfirm={() => {
+                        dispatch(spotActions.deleteSpot(spot.id))
+                          .then(() => {
+                            closeModal();
+                            console.log("Spot deleted:", spot.id)
+                          })
+                          .catch((err) =>
+                            console.error("Failed to delete spot:", err)
+                          );
+                      }}
+                      onCancel={() => console.log("Delete canceled")}
+                    />
+                  }
+                />
               </div>
             </li>
           ))}

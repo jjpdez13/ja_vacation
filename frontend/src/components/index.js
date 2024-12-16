@@ -9,4 +9,5 @@ export { default as SpotDetailsPage } from './SpotDetailsPage';
 export { default as ReviewsList } from './ReviewsList';
 export { default as ReviewsFormModal } from './ReviewsFormModal';
 export { default as ManageSpotsPage } from './ManageSpotsPage';
+export { default as ConfirmationModal } from './ConfirmationModal';
 export * from './Navigation';

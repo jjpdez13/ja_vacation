@@ -37,7 +37,7 @@ export const getSpots = () => async (dispatch) => {
   // Ensure preview images are included
   const spotsWithImages = list.Spots.map((spot) => ({
     ...spot,
-    avgRating: spot.avgRating || 0,
+    avgRating: Number(spot.avgRating) || 0,
     previewImage: spot.previewImage || null,
   }));
 

@@ -16,6 +16,12 @@ const SpotsListPage = () => {
 
   const spotsArr = Object.values(spots || {});
 
+  useEffect(() => {
+    if (spotsArr.length > 0) {
+      console.log("Spot IDs being shown:", spotsArr.map((spot) => spot.id));
+    }
+  }, [spotsArr]);
+  
   return (
     <div className="spots-list-container">
       <header className="spots-list-header">
